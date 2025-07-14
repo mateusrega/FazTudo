@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import Builder from "./pages/Builder";
 import Feedback from "./pages/Feedback";
 import { UserProvider } from "./contexts/UserContext";
+import AdminFeedbacks from "./pages/AdminFeedbacks";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/builder/:id" element={<Builder />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="*" element={<Navigate to="/login" />} />
+          <Route path="/admin/feedbacks" element={<AdminFeedbacks />} />
         </Routes>
       </Router>
     </UserProvider>
