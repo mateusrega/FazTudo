@@ -1,69 +1,59 @@
+// src/pages/Feedback.jsx
 import React, { useState, useContext } from "react";
 import { db } from "../services/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { UserContext } from "../contexts/UserContext";
-import { useNavigate } from "react-router-dom";
 
 const Feedback = () => {
-  const { user } = useContext(UserContext);
   const [mensagem, setMensagem] = useState("");
   const [tipo, setTipo] = useState("sugestao");
-  const navigate = useNavigate();
+  const { user } = useContext(UserContext);
 
-  const enviarFeedback = async (e) => {
-    e.preventDefault();
-    if (!mensagem.trim()) return alert("Escreva sua mensagem!");
+  const enviarFeedback = async () => {
+    if (!mensagem) return alert("Preencha a mensagem!");
 
-    try {
-      await addDoc(collection(db, "feedbacks"), {
-        userId: user?.uid || "anônimo",
-        mensagem,
-        tipo,
-        createdAt: serverTimestamp(),
-      });
-      alert("Obrigado pelo seu feedback!");
-      navigate("/dashboard");
-    } catch (err) {
-      alert("Erro ao enviar feedback.");
-    }
+    await addDoc(collection(db, "feedbacks"), {
+      userId: user.uid,
+      mensagem,
+      tipo,
+      createdAt: serverTimestamp(),
+    });
+
+    alert("Feedback enviado com sucesso!");
+    setMensagem("");
+    setTipo("sugestao");
   };
 
   return (
-    <div className="p-6 max-w-xl mx-auto">
-      <h1 className="text-2xl mb-4">Envie seu feedback</h1>
+    <div className="p-6 max-w-xl mx-auto bg-white rounded-xl shadow-md mt-10">
+      <h1 className="text-2xl font-bold mb-4">💬 Enviar Feedback</h1>
 
-      <form onSubmit={enviarFeedback} className="flex flex-col gap-4">
-        <label>
-          Tipo:
-          <select
-            value={tipo}
-            onChange={(e) => setTipo(e.target.value)}
-            className="w-full border p-2 rounded mt-1"
-          >
-            <option value="sugestao">Sugestão</option>
-            <option value="elogio">Elogio</option>
-            <option value="erro">Erro/Bug</option>
-            <option value="outro">Outro</option>
-          </select>
-        </label>
+      <label className="block mb-2 font-medium">Tipo:</label>
+      <select
+        className="w-full border p-2 rounded bg-gray-50"
+        value={tipo}
+        onChange={(e) => setTipo(e.target.value)}
+      >
+        <option value="sugestao">Sugestão</option>
+        <option value="erro">Erro</option>
+        <option value="elogio">Elogio</option>
+        <option value="outro">Outro</option>
+      </select>
 
-        <label>
-          Mensagem:
-          <textarea
-            value={mensagem}
-            onChange={(e) => setMensagem(e.target.value)}
-            className="w-full border p-2 h-32 rounded mt-1"
-            placeholder="Digite sua ideia, sugestão ou erro encontrado..."
-          />
-        </label>
+      <label className="block mt-4 mb-2 font-medium">Mensagem:</label>
+      <textarea
+        className="w-full border p-3 rounded bg-gray-50"
+        rows="4"
+        value={mensagem}
+        onChange={(e) => setMensagem(e.target.value)}
+      ></textarea>
 
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Enviar
-        </button>
-      </form>
+      <button
+        onClick={enviarFeedback}
+        className="mt-4 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
+      >
+        Enviar
+      </button>
     </div>
   );
 };
