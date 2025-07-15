@@ -9,7 +9,7 @@ const Sidebar = () => {
   const ADMIN_UID = import.meta.env.VITE_ADMIN_UID;
 
   const links = [
-    { to: "/dashboard", label: "Início" }, // botão aparece como Início
+    { to: "/dashboard", label: "Início" },
     { to: "/builder", label: "Builder" },
     { to: "/feedback", label: "Feedback" },
   ];
