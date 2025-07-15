@@ -1,41 +1,39 @@
-// src/components/Sidebar.jsx
-import React, { useContext } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { UserContext } from "../contexts/UserContext";
+import React from "react";
+import { FaHome, FaCogs, FaEnvelope, FaUserShield, FaRocket } from "react-icons/fa";
 
-const Sidebar = () => {
-  const { pathname } = useLocation();
-  const { user } = useContext(UserContext);
-  const ADMIN_UID = import.meta.env.VITE_ADMIN_UID;
-
-  const links = [
-    { to: "/dashboard", label: "Início" },
-    { to: "/builder", label: "Builder" },
-    { to: "/feedback", label: "Feedback" },
-  ];
-
-  if (user?.uid === ADMIN_UID) {
-    links.push({ to: "/admin/feedbacks", label: "Admin" });
-  }
-
+export default function Sidebar() {
   return (
-    <aside className="min-h-screen w-60 bg-white border-r px-4 py-8 fixed">
-      <h1 className="text-2xl font-bold mb-8 text-green-600">FazTudo</h1>
-      <nav className="space-y-4">
-        {links.map(({ to, label }) => (
-          <Link
-            key={to}
-            to={to}
-            className={`block px-4 py-2 rounded hover:bg-green-50 ${
-              pathname === to ? "bg-green-100 text-green-700 font-semibold" : "text-gray-700"
-            }`}
-          >
-            {label}
-          </Link>
-        ))}
+    <aside className="w-64 h-screen bg-blue-900 text-white flex flex-col">
+      <div className="flex items-center gap-2 px-4 py-5 border-b border-blue-700">
+        <FaRocket className="text-3xl text-yellow-400" />
+        <h1 className="text-2xl font-bold select-none">FazTudo</h1>
+      </div>
+      <nav className="flex-1 px-4 py-6">
+        <ul className="space-y-4">
+          <li>
+            <a href="/" className="flex items-center gap-3 hover:text-yellow-400">
+              <FaHome /> Início
+            </a>
+          </li>
+          <li>
+            <a href="/builder" className="flex items-center gap-3 hover:text-yellow-400">
+              <FaCogs /> Builder
+            </a>
+          </li>
+          <li>
+            <a href="/feedback" className="flex items-center gap-3 hover:text-yellow-400">
+              <FaEnvelope /> Feedback
+            </a>
+          </li>
+          {/* Coloque a lógica para mostrar só para admins aqui */}
+          {/* Exemplo: {isAdmin && ( ... )} */}
+          <li>
+            <a href="/admin" className="flex items-center gap-3 hover:text-yellow-400">
+              <FaUserShield /> Admin
+            </a>
+          </li>
+        </ul>
       </nav>
     </aside>
   );
-};
-
-export default Sidebar;
+}
