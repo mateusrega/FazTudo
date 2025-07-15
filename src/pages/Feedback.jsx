@@ -3,57 +3,67 @@ import React, { useState, useContext } from "react";
 import { db } from "../services/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { UserContext } from "../contexts/UserContext";
+import Sidebar from "../components/Sidebar";
 
 const Feedback = () => {
   const [mensagem, setMensagem] = useState("");
-  const [tipo, setTipo] = useState("sugestao");
+  const [tipo, setTipo] = useState("elogio");
   const { user } = useContext(UserContext);
 
   const enviarFeedback = async () => {
-    if (!mensagem) return alert("Preencha a mensagem!");
+    if (!mensagem.trim()) return alert("Escreva algo no feedback.");
 
-    await addDoc(collection(db, "feedbacks"), {
-      userId: user.uid,
-      mensagem,
-      tipo,
-      createdAt: serverTimestamp(),
-    });
-
-    alert("Feedback enviado com sucesso!");
-    setMensagem("");
-    setTipo("sugestao");
+    try {
+      await addDoc(collection(db, "feedbacks"), {
+        userId: user?.uid || "desconhecido",
+        mensagem,
+        tipo,
+        createdAt: serverTimestamp(),
+      });
+      setMensagem("");
+      alert("Feedback enviado com sucesso!");
+    } catch (error) {
+      alert("Erro ao enviar feedback.");
+    }
   };
 
   return (
-    <div className="p-6 max-w-xl mx-auto bg-white rounded-xl shadow-md mt-10">
-      <h1 className="text-2xl font-bold mb-4">💬 Enviar Feedback</h1>
+    <div className="flex">
+      <Sidebar />
+      <main className="ml-60 p-6 w-full">
+        <h1 className="text-3xl font-bold mb-6">📢 Enviar Feedback</h1>
 
-      <label className="block mb-2 font-medium">Tipo:</label>
-      <select
-        className="w-full border p-2 rounded bg-gray-50"
-        value={tipo}
-        onChange={(e) => setTipo(e.target.value)}
-      >
-        <option value="sugestao">Sugestão</option>
-        <option value="erro">Erro</option>
-        <option value="elogio">Elogio</option>
-        <option value="outro">Outro</option>
-      </select>
+        <div className="space-y-4 max-w-xl">
+          <label className="block">
+            Tipo:
+            <select
+              className="block mt-1 border p-2 rounded w-full"
+              value={tipo}
+              onChange={(e) => setTipo(e.target.value)}
+            >
+              <option value="elogio">Elogio</option>
+              <option value="sugestao">Sugestão</option>
+              <option value="erro">Erro</option>
+            </select>
+          </label>
 
-      <label className="block mt-4 mb-2 font-medium">Mensagem:</label>
-      <textarea
-        className="w-full border p-3 rounded bg-gray-50"
-        rows="4"
-        value={mensagem}
-        onChange={(e) => setMensagem(e.target.value)}
-      ></textarea>
+          <label className="block">
+            Mensagem:
+            <textarea
+              className="block mt-1 border p-2 rounded w-full h-32 resize-none"
+              value={mensagem}
+              onChange={(e) => setMensagem(e.target.value)}
+            />
+          </label>
 
-      <button
-        onClick={enviarFeedback}
-        className="mt-4 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
-      >
-        Enviar
-      </button>
+          <button
+            onClick={enviarFeedback}
+            className="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600"
+          >
+            Enviar
+          </button>
+        </div>
+      </main>
     </div>
   );
 };
