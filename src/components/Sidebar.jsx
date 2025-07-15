@@ -1,15 +1,22 @@
 // src/components/Sidebar.jsx
-import React from "react";
+import React, { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { UserContext } from "../contexts/UserContext";
 
 const Sidebar = () => {
   const { pathname } = useLocation();
+  const { user } = useContext(UserContext);
+  const ADMIN_UID = import.meta.env.VITE_ADMIN_UID;
 
   const links = [
-    { to: "/dashboard", label: "Dashboard" },
+    { to: "/dashboard", label: "Início" }, // botão aparece como Início
     { to: "/builder", label: "Builder" },
     { to: "/feedback", label: "Feedback" },
   ];
+
+  if (user?.uid === ADMIN_UID) {
+    links.push({ to: "/admin/feedbacks", label: "Admin" });
+  }
 
   return (
     <aside className="min-h-screen w-60 bg-white border-r px-4 py-8 fixed">
