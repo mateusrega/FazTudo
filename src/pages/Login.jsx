@@ -6,8 +6,8 @@ import { signInWithPopup } from "firebase/auth";
 import { UserContext } from "../contexts/UserContext";
 
 const Login = () => {
-  const { user, setUser } = useContext(UserContext);
-  const navigate = useNavigate(); // usado para redirecionar no modo teste
+  const { user } = useContext(UserContext);
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
@@ -17,35 +17,29 @@ const Login = () => {
     }
   };
 
-  const entrarComoTeste = () => {
-    // Define usuário de teste
-    setUser({
-      uid: "teste123",
-      email: "teste@faztudo.app",
-      displayName: "Usuário de Teste",
-      isTestUser: true,
-    });
-    navigate("/dashboard");
+  const entrarModoEmergencia = () => {
+    // Apenas redireciona para o builder sem autenticação
+    navigate("/builder");
   };
 
   if (user) return <Navigate to="/dashboard" />;
 
   return (
     <div className="flex justify-center items-center h-screen bg-gradient-to-br from-green-100 to-blue-100">
-      <div className="text-center w-full max-w-sm">
-        <h1 className="text-3xl font-bold mb-8 text-gray-800">🌱 Bem-vindo ao FazTudo</h1>
+      <div className="bg-white shadow-xl rounded-xl p-8 text-center w-full max-w-sm">
+        <h1 className="text-2xl font-bold mb-6 text-gray-800">🌱 Bem-vindo ao FazTudo</h1>
         <button
           onClick={handleLogin}
-          className="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition-all w-full mb-4"
+          className="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition-all w-full"
         >
           Entrar com Google
         </button>
 
         <button
-          onClick={entrarComoTeste}
-          className="bg-gray-500 text-white px-6 py-3 rounded-md hover:bg-gray-600 transition-all w-full"
+          onClick={entrarModoEmergencia}
+          className="mt-4 bg-gray-300 text-gray-800 px-6 py-2 rounded-md hover:bg-gray-400 transition-all w-full"
         >
-          Entrar como Teste
+          Acessar modo de emergência
         </button>
       </div>
     </div>
