@@ -1,36 +1,17 @@
-// src/App.jsx
-import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Builder from "./pages/Builder";
-import Feedback from "./pages/Feedback";
-import AdminFeedbacks from "./pages/AdminFeedbacks";
-import { UserProvider } from "./contexts/UserContext";
+import { UserProvider } from "./contexts/UserContext"; // garante que o contexto funcione
 
 function App() {
-  const [user, setUser] = useState(null);
-  const [modoEmergencia, setModoEmergencia] = useState(true); // ATIVE PARA LIBERAR ACESSO SEM LOGIN
-
-  if (!user && !modoEmergencia) {
-    return <Navigate to="/login" />;
-  }
-
   return (
-    <UserProvider value={{ user: user || (modoEmergencia && {
-      uid: "emergencia",
-      email: "emergencia@faztudo.dev",
-      displayName: "Modo Emergência",
-      isEmergencia: true,
-    }), setUser }}>
+    <UserProvider>
       <Router>
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/builder/:id" element={<Builder />} />
-          <Route path="/feedback" element={<Feedback />} />
-          <Route path="/admin/feedbacks" element={<AdminFeedbacks />} />
-          <Route path="*" element={<Navigate to="/dashboard" />} />
+          <Route path="/builder" element={<Builder />} /> {/* Acesso ao builder mesmo sem login */}
         </Routes>
       </Router>
     </UserProvider>
@@ -38,4 +19,3 @@ function App() {
 }
 
 export default App;
-
