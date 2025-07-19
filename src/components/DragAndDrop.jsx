@@ -25,15 +25,6 @@ export default function DragAndDrop() {
     e.dataTransfer.setData("text/plain", name);
   };
 
-  const exportFlow = () => {
-    const exportData = flow.map((item, index) => ({
-      id: index,
-      name: item.name,
-      type: item.type
-    }));
-    alert(JSON.stringify(exportData, null, 2));
-  };
-
   return (
     <div className="flex h-full p-4 gap-4">
       <div className="w-1/4 bg-gray-100 p-4 rounded shadow">
@@ -48,12 +39,6 @@ export default function DragAndDrop() {
             {icon} {name}
           </div>
         ))}
-        <button
-          onClick={exportFlow}
-          className="mt-4 bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700"
-        >
-          Exportar JSON
-        </button>
       </div>
 
       <div
