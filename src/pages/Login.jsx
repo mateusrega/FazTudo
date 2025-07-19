@@ -36,10 +36,10 @@ const Login = () => {
         </button>
 
         <button
-          onClick={entrarModoEmergencia}
+          onClick={entrarModoteste}
           className="mt-4 bg-gray-300 text-gray-800 px-6 py-2 rounded-md hover:bg-gray-400 transition-all w-full"
         >
-          Acessar modo de emergência
+          Testar
         </button>
       </div>
     </div>
