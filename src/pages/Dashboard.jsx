@@ -2,6 +2,7 @@
 import React from "react";
 import Sidebar from "../components/Sidebar";
 
+const modoTeste = localStorage.getItem("modoTeste") === "true";
 const Dashboard = () => {
   return (
     <div className="flex">
