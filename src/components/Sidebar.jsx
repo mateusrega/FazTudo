@@ -1,8 +1,13 @@
-// src/components/Sidebar.jsx
-import React from "react";
+import React, { useContext } from "react";
 import { FaHome, FaCogs, FaEnvelope, FaUserShield, FaRocket } from "react-icons/fa";
+import { UserContext } from "../contexts/UserContext";
 
-export default function Sidebar({ modoTeste }) {
+export default function Sidebar() {
+  const { user } = useContext(UserContext);
+  const modoTeste = localStorage.getItem("modoTeste") === "true";
+
+  const isAdmin = user && user.email === "admin@exemplo.com"; // ou seu critério de admin
+
   return (
     <aside className="w-64 h-screen bg-blue-900 text-white flex flex-col">
       <div className="flex items-center gap-2 px-4 py-5 border-b border-blue-700">
@@ -26,7 +31,9 @@ export default function Sidebar({ modoTeste }) {
               <FaEnvelope /> Feedback
             </a>
           </li>
-          {!modoTeste && (
+
+          {/* Admin só aparece se não estiver em modo de teste */}
+          {!modoTeste && isAdmin && (
             <li>
               <a href="/admin" className="flex items-center gap-3 hover:text-yellow-400">
                 <FaUserShield /> Admin
