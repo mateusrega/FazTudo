@@ -6,8 +6,8 @@ import { fazTudoTheme } from "./theme";
 export function initBlockly(workspaceRef) {
   const workspace = Blockly.inject(workspaceRef, {
     toolbox: toolboxXml,
-    theme: fazTudoTheme,
-    scrollbars: true,
+    theme: customTheme, // seu tema neon
+    hasSounds: false,   // <- Desativa os sons
     trashcan: true,
     zoom: {
       controls: true,
@@ -21,3 +21,6 @@ export function initBlockly(workspaceRef) {
 
   return workspace;
 }
+
+  
+
