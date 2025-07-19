@@ -1,46 +1,45 @@
-import Blockly from "blockly/core";
+import * as Blockly from 'blockly/core';
 
-export const fazTudoTheme = Blockly.Theme.defineTheme("fazTudoTheme", {
-  base: Blockly.Themes.Classic, // ou 'Modern'
+export const neonTheme = Blockly.Theme.defineTheme('neonTheme', {
+  base: Blockly.Themes.Classic,
   blockStyles: {
     gatilhos: {
-      colourPrimary: "#FFDD00", // Neon amarelo
-      colourSecondary: "#FFE680",
-      colourTertiary: "#FFF6BF"
+      colourPrimary: '#00ffff',   // Neon ciano
+      colourSecondary: '#00ccff',
+      colourTertiary: '#0099cc',
     },
     acoes: {
-      colourPrimary: "#00FFD0", // Neon água
-      colourSecondary: "#80FFEB",
-      colourTertiary: "#BFFFF6"
+      colourPrimary: '#ff00ff',   // Neon rosa
+      colourSecondary: '#cc00cc',
+      colourTertiary: '#990099',
+    },
+    controles: {
+      colourPrimary: '#39ff14',   // Neon verde
+      colourSecondary: '#32cd32',
+      colourTertiary: '#228b22',
     }
   },
   categoryStyles: {
-    gatilhos_category: {
-      colour: "#FFDD00"
-    },
-    acoes_category: {
-      colour: "#00FFD0"
-    }
-  },
-  componentStyles: {
-    workspaceBackgroundColour: "#0d0d0d",
-    toolboxBackgroundColour: "#1a1a1a",
-    toolboxForegroundColour: "#fff",
-    flyoutBackgroundColour: "#121212",
-    flyoutForegroundColour: "#ccc",
-    flyoutOpacity: 1,
-    scrollbarColour: "#00FFD0",
-    insertionMarkerColour: "#fff",
-    insertionMarkerOpacity: 0.4,
-    cursorColour: "#00FF88",
-    selectedGlowColour: "#00FF88",
-    selectedGlowSize: 2,
-    replacementGlowColour: "#FF5555",
-    replacementGlowSize: 2
+    gatilhos_category: { colour: '#00ffff' },
+    acoes_category: { colour: '#ff00ff' },
+    controles_category: { colour: '#39ff14' },
   },
   fontStyle: {
-    family: "Inter, sans-serif",
-    size: 14,
-    weight: "600"
+    family: 'Rubik, sans-serif',
+    weight: 'bold',
+    size: 14
+  },
+  componentStyles: {
+    workspaceBackgroundColour: '#111111',
+    toolboxBackgroundColour: '#222222',
+    toolboxForegroundColour: '#ffffff',
+    flyoutBackgroundColour: '#1a1a1a',
+    flyoutForegroundColour: '#cccccc',
+    flyoutOpacity: 0.9,
+    scrollbarColour: '#00ffff',
+    insertionMarkerColour: '#ff00ff',
+    insertionMarkerOpacity: 0.5,
+    markerColour: '#39ff14',
+    cursorColour: '#ffffff',
   }
 });
