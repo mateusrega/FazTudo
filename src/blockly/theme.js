@@ -1,45 +1,54 @@
-import * as Blockly from 'blockly/core';
-
-export const neonTheme = Blockly.Theme.defineTheme('neonTheme', {
+export const neonTheme = Blockly.Theme.defineTheme('neon', {
   base: Blockly.Themes.Classic,
   blockStyles: {
-    gatilhos: {
-      colourPrimary: '#00ffff',   // Neon ciano
-      colourSecondary: '#00ccff',
-      colourTertiary: '#0099cc',
+    action_blocks: {
+      colourPrimary: '#00FFC6', // Neon verde-água
+      colourSecondary: '#00AA8D',
+      colourTertiary: '#007F6A',
     },
-    acoes: {
-      colourPrimary: '#ff00ff',   // Neon rosa
-      colourSecondary: '#cc00cc',
-      colourTertiary: '#990099',
+    trigger_blocks: {
+      colourPrimary: '#FF00C8', // Neon rosa
+      colourSecondary: '#AA0091',
+      colourTertiary: '#7A006B',
     },
-    controles: {
-      colourPrimary: '#39ff14',   // Neon verde
-      colourSecondary: '#32cd32',
-      colourTertiary: '#228b22',
-    }
+    logic_blocks: {
+      colourPrimary: '#FFFD00', // Neon amarelo
+      colourSecondary: '#B7B200',
+      colourTertiary: '#7F7C00',
+    },
+    control_blocks: {
+      colourPrimary: '#00A2FF', // Neon azul
+      colourSecondary: '#0073B2',
+      colourTertiary: '#005080',
+    },
+    debug_blocks: {
+      colourPrimary: '#FFA500', // Laranja
+      colourSecondary: '#CC8400',
+      colourTertiary: '#996300',
+    },
   },
   categoryStyles: {
-    gatilhos_category: { colour: '#00ffff' },
-    acoes_category: { colour: '#ff00ff' },
-    controles_category: { colour: '#39ff14' },
-  },
-  fontStyle: {
-    family: 'Rubik, sans-serif',
-    weight: 'bold',
-    size: 14
+    actions_category: { colour: '#00FFC6' },
+    triggers_category: { colour: '#FF00C8' },
+    logic_category: { colour: '#FFFD00' },
+    control_category: { colour: '#00A2FF' },
+    debug_category: { colour: '#FFA500' },
   },
   componentStyles: {
-    workspaceBackgroundColour: '#111111',
-    toolboxBackgroundColour: '#222222',
+    workspaceBackgroundColour: '#0a0a0a',
+    toolboxBackgroundColour: '#0f0f0f',
     toolboxForegroundColour: '#ffffff',
-    flyoutBackgroundColour: '#1a1a1a',
+    flyoutBackgroundColour: '#1c1c1c',
     flyoutForegroundColour: '#cccccc',
-    flyoutOpacity: 0.9,
-    scrollbarColour: '#00ffff',
-    insertionMarkerColour: '#ff00ff',
-    insertionMarkerOpacity: 0.5,
-    markerColour: '#39ff14',
-    cursorColour: '#ffffff',
+    insertionMarkerColour: '#ffffff',
+    insertionMarkerOpacity: 0.3,
+    scrollbarColour: '#00FFC6',
+    scrollbarOpacity: 0.6,
+    cursorColour: '#FF00C8',
+  },
+  fontStyle: {
+    family: 'Fira Code, monospace',
+    weight: 'bold',
+    size: 14,
   }
 });
