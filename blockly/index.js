@@ -1,12 +1,12 @@
 import Blockly from "blockly";
-import "blockly/blocks";
-import "blockly/javascript";
 import { toolboxXml } from "./toolbox";
 import "./customBlocks";
+import { fazTudoTheme } from "./theme";
 
 export function initBlockly(workspaceRef) {
   const workspace = Blockly.inject(workspaceRef, {
     toolbox: toolboxXml,
+    theme: fazTudoTheme,
     scrollbars: true,
     trashcan: true,
     zoom: {
@@ -15,8 +15,8 @@ export function initBlockly(workspaceRef) {
       startScale: 1,
       maxScale: 3,
       minScale: 0.3,
-      scaleSpeed: 1.2,
-    },
+      scaleSpeed: 1.2
+    }
   });
 
   return workspace;
