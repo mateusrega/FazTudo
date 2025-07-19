@@ -1,7 +1,8 @@
+// src/components/Sidebar.jsx
 import React from "react";
 import { FaHome, FaCogs, FaEnvelope, FaUserShield, FaRocket } from "react-icons/fa";
 
-export default function Sidebar() {
+export default function Sidebar({ modoTeste }) {
   return (
     <aside className="w-64 h-screen bg-blue-900 text-white flex flex-col">
       <div className="flex items-center gap-2 px-4 py-5 border-b border-blue-700">
@@ -25,13 +26,13 @@ export default function Sidebar() {
               <FaEnvelope /> Feedback
             </a>
           </li>
-          {/* Coloque a lógica para mostrar só para admins aqui */}
-          {/* Exemplo: {isAdmin && ( ... )} */}
-          <li>
-            <a href="/admin" className="flex items-center gap-3 hover:text-yellow-400">
-              <FaUserShield /> Admin
-            </a>
-          </li>
+          {!modoTeste && (
+            <li>
+              <a href="/admin" className="flex items-center gap-3 hover:text-yellow-400">
+                <FaUserShield /> Admin
+              </a>
+            </li>
+          )}
         </ul>
       </nav>
     </aside>
