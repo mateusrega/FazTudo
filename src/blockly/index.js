@@ -18,7 +18,10 @@ export function initBlockly(workspaceRef) {
       scaleSpeed: 1.2
     }
   });
-
+// 🔇 Desativar sons completamente:
+workspace.getAudioManager().setVolume(0);
+workspace.getAudioManager().play = function () {};
+workspace.getAudioManager().load = function () {};
   return workspace;
 }
 
