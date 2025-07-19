@@ -17,9 +17,9 @@ const Login = () => {
     }
   };
 
-  const entrarModoEmergencia = () => {
-    // Apenas redireciona para o builder sem autenticação
-    navigate("/builder");
+  const entrarModoTeste = () => {
+    localStorage.setItem("modoTeste", "true");
+    navigate("/dashboard");
   };
 
   if (user) return <Navigate to="/dashboard" />;
@@ -36,7 +36,7 @@ const Login = () => {
         </button>
 
         <button
-          onClick={entrarModoteste}
+          onClick={entrarModoTeste}
           className="mt-4 bg-gray-300 text-gray-800 px-6 py-2 rounded-md hover:bg-gray-400 transition-all w-full"
         >
           Testar
