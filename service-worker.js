@@ -3,7 +3,7 @@ const urlsToCache = [
   "/",
   "/index.html",
   "/favicon.ico",
-  "/manifest.webmanifest",
+  "/manifest.json",
   // adicione os principais assets estáticos aqui se quiser, ex:
   "/src/main.jsx",
   "/src/index.css",
