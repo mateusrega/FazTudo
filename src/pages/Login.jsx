@@ -1,49 +1,84 @@
-// src/pages/Login.jsx
-import React, { useContext } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import { auth, provider } from "../services/firebase";
-import { signInWithPopup } from "firebase/auth";
-import { UserContext } from "../contexts/UserContext";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
-const Login = () => {
-  const { user } = useContext(UserContext);
+export default function Login() {
+  const auth = getAuth();
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const handleLogin = async () => {
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, [auth]);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
     try {
-      await signInWithPopup(auth, provider);
-    } catch (error) {
-      alert("Erro ao fazer login: " + error.message);
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate("/dashboard"); // redireciona após login
+    } catch (err) {
+      setError("Usuário ou senha inválidos");
     }
   };
 
-  const entrarModoTeste = () => {
-    localStorage.setItem("modoTeste", "true");
-    navigate("/dashboard");
+  const handleLogout = () => {
+    signOut(auth);
   };
 
-  if (user) return <Navigate to="/dashboard" />;
+  if (loading) return <p>Carregando...</p>;
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gradient-to-br from-green-100 to-blue-100">
-      <div className="bg-white shadow-xl rounded-xl p-8 text-center w-full max-w-sm">
-        <h1 className="text-2xl font-bold mb-6 text-gray-800">🌱 Bem-vindo ao FazTudo</h1>
-        <button
-          onClick={handleLogin}
-          className="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition-all w-full"
-        >
-          Entrar com Google
-        </button>
+    <div className="min-h-screen flex flex-col justify-center items-center bg-gray-900 text-white">
+      <h1 className="text-2xl font-bold mb-4">Login - FazTudo</h1>
 
-        <button
-          onClick={entrarModoTeste}
-          className="mt-4 bg-gray-300 text-gray-800 px-6 py-2 rounded-md hover:bg-gray-400 transition-all w-full"
-        >
-          Testar
-        </button>
-      </div>
+      {user ? (
+        <div className="text-center">
+          <p className="mb-2">Você já está logado como <strong>{user.email}</strong>.</p>
+          <button
+            onClick={() => navigate("/dashboard")}
+            className="bg-green-600 px-4 py-2 rounded mr-2"
+          >
+            Ir para Dashboard
+          </button>
+          <button
+            onClick={handleLogout}
+            className="bg-red-600 px-4 py-2 rounded"
+          >
+            Sair
+          </button>
+        </div>
+      ) : (
+        <form onSubmit={handleLogin} className="bg-gray-800 p-6 rounded shadow-md w-80">
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-full mb-4 p-2 rounded bg-gray-700"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Senha"
+            className="w-full mb-4 p-2 rounded bg-gray-700"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit" className="bg-blue-600 w-full py-2 rounded">
+            Entrar
+          </button>
+          {error && <p className="text-red-400 mt-2">{error}</p>}
+        </form>
+      )}
     </div>
   );
-};
-
-export default Login;
+}
