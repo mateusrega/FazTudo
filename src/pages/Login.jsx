@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 
 export default function Login() {
   const auth = getAuth();
@@ -21,16 +27,45 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError(""); // limpa erro anterior
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate("/dashboard"); // redireciona após login
+      await signInWithEmailAndPassword(auth, email.trim(), password);
+      navigate("/dashboard");
     } catch (err) {
-      setError("Usuário ou senha inválidos");
+      console.error("Erro ao logar:", err.code, err.message);
+      if (err.code === "auth/user-not-found") {
+        setError("Usuário não encontrado");
+      } else if (err.code === "auth/wrong-password") {
+        setError("Senha incorreta");
+      } else if (err.code === "auth/invalid-email") {
+        setError("E-mail inválido");
+      } else {
+        setError("Erro ao logar: " + err.message);
+      }
     }
   };
 
   const handleLogout = () => {
     signOut(auth);
+  };
+
+  const handleRegister = async () => {
+    setError(""); // limpa erro anterior
+    try {
+      await createUserWithEmailAndPassword(auth, email.trim(), password);
+      navigate("/dashboard");
+    } catch (err) {
+      console.error("Erro ao criar conta:", err.code, err.message);
+      if (err.code === "auth/email-already-in-use") {
+        setError("Este e-mail já está em uso");
+      } else if (err.code === "auth/weak-password") {
+        setError("A senha deve ter pelo menos 6 caracteres");
+      } else if (err.code === "auth/invalid-email") {
+        setError("E-mail inválido");
+      } else {
+        setError("Erro ao criar conta: " + err.message);
+      }
+    }
   };
 
   if (loading) return <p>Carregando...</p>;
@@ -41,7 +76,9 @@ export default function Login() {
 
       {user ? (
         <div className="text-center">
-          <p className="mb-2">Você já está logado como <strong>{user.email}</strong>.</p>
+          <p className="mb-2">
+            Você já está logado como <strong>{user.email}</strong>.
+          </p>
           <button
             onClick={() => navigate("/dashboard")}
             className="bg-green-600 px-4 py-2 rounded mr-2"
@@ -76,7 +113,17 @@ export default function Login() {
           <button type="submit" className="bg-blue-600 w-full py-2 rounded">
             Entrar
           </button>
-          {error && <p className="text-red-400 mt-2">{error}</p>}
+
+          {/* botão de cadastro */}
+          <button
+            type="button"
+            onClick={handleRegister}
+            className="mt-3 w-full text-sm text-blue-400 underline"
+          >
+            Criar nova conta
+          </button>
+
+          {error && <p className="text-red-400 mt-3 text-sm">{error}</p>}
         </form>
       )}
     </div>
