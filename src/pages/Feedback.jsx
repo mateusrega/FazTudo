@@ -49,21 +49,19 @@ const Feedback = () => {
 
           <label className="block">
             Mensagem:
-            <textarea
-              className="block mt-1 border p-2 rounded w-full h-32 resize-none"
-              value={mensagem}
-              onChange={(e) => setMensagem(e.target.value)}
-              placeholder="Deixe seu feedback..." disabled={true}
-            />
-          </label>
-
-          <button
-            onClick={enviarFeedback}
-            className="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600"
-            disabled title="Feedback temporariamente desativado"
-          >
-            Enviar
-          </button>
+<textarea
+  className="block mt-1 border p-2 rounded w-full h-32 resize-none"
+  value={mensagem}
+  onChange={(e) => setMensagem(e.target.value)}
+  placeholder="Deixe seu feedback..."
+/>
+ </label>
+<button
+  onClick={enviarFeedback}
+  className="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600"
+>
+  Enviar
+</button>
         </div>
       </main>
     </div>
