@@ -3,12 +3,12 @@
   "name": "FazTudo - Automação Pessoal",
   "icons": [
     {
-      "src": "/icon-192x192.png",
+      "src": "/src/assets/icon-192x192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/logo-512.png",
+      "src": "/src/assets/logo-512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
