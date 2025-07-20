@@ -2,7 +2,6 @@ const CACHE_NAME = "faztudo-cache-v1";
 const urlsToCache = [
   "/",
   "/index.html",
-  "/favicon.ico",
   "/manifest.json",
   // adicione os principais assets estáticos aqui se quiser, ex:
   "/src/main.jsx",
