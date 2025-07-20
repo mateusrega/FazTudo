@@ -83,7 +83,7 @@ export default function Login() {
             onClick={() => navigate("/dashboard")}
             className="bg-green-600 px-4 py-2 rounded mr-2"
           >
-            Ir para Dashboard
+            Início
           </button>
           <button
             onClick={handleLogout}
