@@ -53,7 +53,7 @@ const Feedback = () => {
               className="block mt-1 border p-2 rounded w-full h-32 resize-none"
               value={mensagem}
               onChange={(e) => setMensagem(e.target.value)}
-              placeholder="Deixe seu feedback..." disabled={false}
+              placeholder="Deixe seu feedback..." disabled={true}
             />
           </label>
 
