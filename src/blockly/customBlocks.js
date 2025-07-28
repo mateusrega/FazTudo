@@ -40,3 +40,6 @@ Blockly.defineBlocksWithJsonArray([
     style: "acoes",
     tooltip: "Responde automaticamente"
   }
+
+]
+)
