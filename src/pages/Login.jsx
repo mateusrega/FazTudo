@@ -7,6 +7,7 @@ import {
   signOut,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
+import { FaRocket, FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function Login() {
   const auth = getAuth();
@@ -16,6 +17,8 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -25,23 +28,30 @@ export default function Login() {
     return () => unsubscribe();
   }, [auth]);
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // limpa erro anterior
+    setError("");
+    
     try {
-      await signInWithEmailAndPassword(auth, email.trim(), password);
+      if (isLogin) {
+        await signInWithEmailAndPassword(auth, email.trim(), password);
+      } else {
+        await createUserWithEmailAndPassword(auth, email.trim(), password);
+      }
       navigate("/dashboard");
     } catch (err) {
-      console.error("Erro ao logar:", err.code, err.message);
-      if (err.code === "auth/user-not-found") {
-        setError("Usuário não encontrado");
-      } else if (err.code === "auth/wrong-password") {
-        setError("Senha incorreta");
-      } else if (err.code === "auth/invalid-email") {
-        setError("E-mail inválido");
-      } else {
-        setError("Erro ao logar: " + err.message);
-      }
+      console.error("Erro:", err.code, err.message);
+      
+      const errorMessages = {
+        "auth/user-not-found": "Usuário não encontrado",
+        "auth/wrong-password": "Senha incorreta",
+        "auth/invalid-email": "E-mail inválido",
+        "auth/email-already-in-use": "Este e-mail já está em uso",
+        "auth/weak-password": "A senha deve ter pelo menos 6 caracteres",
+        "auth/invalid-credential": "Credenciais inválidas"
+      };
+      
+      setError(errorMessages[err.code] || `Erro: ${err.message}`);
     }
   };
 
@@ -49,83 +59,146 @@ export default function Login() {
     signOut(auth);
   };
 
-  const handleRegister = async () => {
-    setError(""); // limpa erro anterior
-    try {
-      await createUserWithEmailAndPassword(auth, email.trim(), password);
-      navigate("/dashboard");
-    } catch (err) {
-      console.error("Erro ao criar conta:", err.code, err.message);
-      if (err.code === "auth/email-already-in-use") {
-        setError("Este e-mail já está em uso");
-      } else if (err.code === "auth/weak-password") {
-        setError("A senha deve ter pelo menos 6 caracteres");
-      } else if (err.code === "auth/invalid-email") {
-        setError("E-mail inválido");
-      } else {
-        setError("Erro ao criar conta: " + err.message);
-      }
-    }
-  };
-
-  if (loading) return <p>Carregando...</p>;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white mx-auto mb-4"></div>
+          <p className="text-white text-lg">Carregando...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-gray-900 text-white">
-      <h1 className="text-2xl font-bold mb-4">Login - FazTudo</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 p-4">
+      <div className="max-w-md w-full">
+        {user ? (
+          // User is logged in
+          <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-white/20">
+            <div className="text-center mb-6">
+              <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-4 rounded-2xl inline-block mb-4">
+                <FaRocket className="text-3xl text-white" />
+              </div>
+              <h1 className="text-2xl font-bold text-white mb-2">Bem-vindo de volta!</h1>
+              <p className="text-blue-200">
+                Você está logado como <strong>{user.email}</strong>
+              </p>
+            </div>
 
-      {user ? (
-        <div className="text-center">
-          <p className="mb-2">
-            Você já está logado como <strong>{user.email}</strong>.
-          </p>
-          <button
-            onClick={() => navigate("/dashboard")}
-            className="bg-green-600 px-4 py-2 rounded mr-2"
-          >
-            Início
-          </button>
-          <button
-            onClick={handleLogout}
-            className="bg-red-600 px-4 py-2 rounded"
-          >
-            Sair
-          </button>
-        </div>
-      ) : (
-        <form onSubmit={handleLogin} className="bg-gray-800 p-6 rounded shadow-md w-80">
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full mb-4 p-2 rounded bg-gray-700"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Senha"
-            className="w-full mb-4 p-2 rounded bg-gray-700"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <button type="submit" className="bg-blue-600 w-full py-2 rounded">
-            Entrar
-          </button>
+            <div className="space-y-4">
+              <button
+                onClick={() => navigate("/dashboard")}
+                className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-3 px-6 rounded-xl font-semibold hover:shadow-lg transition-all duration-200 transform hover:scale-105"
+              >
+                Ir para Dashboard
+              </button>
+              <button
+                onClick={handleLogout}
+                className="w-full bg-white/10 text-white py-3 px-6 rounded-xl font-semibold hover:bg-white/20 transition-all duration-200 border border-white/30"
+              >
+                Sair
+              </button>
+            </div>
+          </div>
+        ) : (
+          // Login/Register form
+          <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-white/20">
+            <div className="text-center mb-8">
+              <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-4 rounded-2xl inline-block mb-4">
+                <FaRocket className="text-4xl text-white" />
+              </div>
+              <h1 className="text-3xl font-bold text-white mb-2">FazTudo</h1>
+              <p className="text-blue-200">Automação Pessoal Inteligente</p>
+            </div>
 
-          {/* botão de cadastro */}
-          <button
-            type="button"
-            onClick={handleRegister}
-            className="mt-3 w-full text-sm text-blue-400 underline"
-          >
-            Criar nova conta
-          </button>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Email Input */}
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FaEnvelope className="text-gray-400" />
+                </div>
+                <input
+                  type="email"
+                  placeholder="Seu e-mail"
+                  className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/30 rounded-xl text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
 
-          {error && <p className="text-red-400 mt-3 text-sm">{error}</p>}
-        </form>
-      )}
+              {/* Password Input */}
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FaLock className="text-gray-400" />
+                </div>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Sua senha"
+                  className="w-full pl-10 pr-12 py-3 bg-white/10 border border-white/30 rounded-xl text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <FaEyeSlash className="text-gray-400 hover:text-white transition-colors" />
+                  ) : (
+                    <FaEye className="text-gray-400 hover:text-white transition-colors" />
+                  )}
+                </button>
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-xl font-semibold hover:shadow-lg transition-all duration-200 transform hover:scale-105"
+              >
+                {isLogin ? "Entrar" : "Criar Conta"}
+              </button>
+
+              {/* Toggle Login/Register */}
+              <div className="text-center">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsLogin(!isLogin);
+                    setError("");
+                  }}
+                  className="text-blue-300 hover:text-white transition-colors underline"
+                >
+                  {isLogin ? "Não tem conta? Criar nova conta" : "Já tem conta? Fazer login"}
+                </button>
+              </div>
+
+              {/* Error Message */}
+              {error && (
+                <div className="bg-red-500/20 border border-red-500/50 text-red-200 px-4 py-3 rounded-xl text-sm">
+                  {error}
+                </div>
+              )}
+            </form>
+
+            {/* Features */}
+            <div className="mt-8 pt-6 border-t border-white/20">
+              <p className="text-center text-blue-200 text-sm mb-4">
+                ✨ Recursos disponíveis:
+              </p>
+              <div className="grid grid-cols-2 gap-4 text-xs text-blue-200">
+                <div>• Editor Visual</div>
+                <div>• WhatsApp Integration</div>
+                <div>• Google Sheets</div>
+                <div>• Telegram Bots</div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

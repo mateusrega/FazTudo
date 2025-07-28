@@ -3,31 +3,29 @@ export const toolbox = {
   "contents": [
     {
       "kind": "category",
-      "name": "🔁 Gatilhos",
-      "colour": "#00FFF7",
+      "name": "🔥 Gatilhos",
+      "categorystyle": "gatilhos_category",
       "contents": [
-        { "kind": "block", "type": "webhook_trigger" },
-        { "kind": "block", "type": "button_click_trigger" },
-        { "kind": "block", "type": "voice_command_trigger" }
+        { "kind": "block", "type": "webhook_trigger" }
       ]
     },
     {
-      "kind": "category",
-      "name": "📲 Ações",
-      "colour": "#00FF85",
+      "kind": "category", 
+      "name": "⚡ Ações",
+      "categorystyle": "acoes_category",
       "contents": [
         { "kind": "block", "type": "whatsapp_message" },
-        { "kind": "block", "type": "google_sheets_save" },
+        { "kind": "block", "type": "save_google_sheets" },
         { "kind": "block", "type": "telegram_notification" },
         { "kind": "block", "type": "auto_reply" }
       ]
     },
     {
       "kind": "category",
-      "name": "🧠 Lógica",
-      "colour": "#FFFD00",
+      "name": "🧠 Lógica", 
+      "categorystyle": "logica_category",
       "contents": [
-        { "kind": "block", "type": "bloco_if_else" },
+        { "kind": "block", "type": "controls_if" },
         { "kind": "block", "type": "logic_compare" },
         { "kind": "block", "type": "logic_operation" },
         { "kind": "block", "type": "logic_boolean" }
@@ -35,8 +33,8 @@ export const toolbox = {
     },
     {
       "kind": "category",
-      "name": "🔤 Texto",
-      "colour": "#FF44FF",
+      "name": "📝 Texto",
+      "categorystyle": "texto_category", 
       "contents": [
         { "kind": "block", "type": "text" },
         { "kind": "block", "type": "text_join" },
@@ -45,8 +43,8 @@ export const toolbox = {
     },
     {
       "kind": "category",
-      "name": "⚙️ Variáveis",
-      "colour": "#FFAA00",
+      "name": "🔧 Variáveis",
+      "categorystyle": "variaveis_category",
       "custom": "VARIABLE"
     }
   ]
