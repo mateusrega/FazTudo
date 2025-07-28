@@ -39,9 +39,10 @@ const handleSave = () => {
 
       localStorage.setItem('blockly-workspace', xmlText);
       alert('Automação salva com sucesso!');
+      
     } catch (error) {
-      alert('Erro ao salvar a automação.');
-      console.error(error);
+      console.error('Erro ao salvar:', error);
+      alert('Erro ao salvar automação.');
     }
   }
 };
