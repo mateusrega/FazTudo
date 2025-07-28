@@ -26,30 +26,33 @@ export default function BlocklyEditor() {
     };
   }, []);
 
-const handleSave = () => {
-  if (workspaceRef.current) {
-    try {
-      const xml = Blockly.Xml.workspaceToDom(workspaceRef.current);
-      const xmlText = Blockly.Xml.domToText(xml);
+  const handleSave = () => {
+    if (workspaceRef.current) {
+      try {
+        const xml = Blockly.Xml.workspaceToDom(workspaceRef.current);
+        const xmlText = Blockly.Xml.domToText(xml);
 
-      if (!xmlText || xmlText.includes('<xml xmlns="https://developers.google.com/blockly/xml"></xml>')) {
-        alert('Workspace vazio! Adicione alguns blocos antes de salvar.');
-        return;
+        if (
+          !xmlText ||
+          xmlText.includes(
+            '<xml xmlns="https://developers.google.com/blockly/xml"></xml>'
+          )
+        ) {
+          alert("Workspace vazio! Adicione alguns blocos antes de salvar.");
+          return;
+        }
+
+        localStorage.setItem("blockly-workspace", xmlText);
+        alert("Automação salva com sucesso!");
+      } catch (error) {
+        console.error("Erro ao salvar:", error);
+        alert("Erro ao salvar automação.");
       }
-
-      localStorage.setItem('blockly-workspace', xmlText);
-      alert('Automação salva com sucesso!');
-      
-    } catch (error) {
-      console.error('Erro ao salvar:', error);
-      alert('Erro ao salvar automação.');
     }
-  }
-};
-
+  };
 
   const handleRun = () => {
-    alert('Executando automação... (funcionalidade em desenvolvimento)');
+    alert("Executando automação... (funcionalidade em desenvolvimento)");
   };
 
   const handleExport = () => {
@@ -57,22 +60,22 @@ const handleSave = () => {
       try {
         const code = Blockly.JavaScript.workspaceToCode(workspaceRef.current);
         if (!code.trim()) {
-          alert('Nenhum código para exportar. Adicione alguns blocos primeiro!');
+          alert("Nenhum código para exportar. Adicione alguns blocos primeiro!");
           return;
         }
-        
-        const blob = new Blob([code], { type: 'text/javascript' });
+
+        const blob = new Blob([code], { type: "text/javascript" });
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
+        const a = document.createElement("a");
         a.href = url;
-        a.download = 'automacao.js';
+        a.download = "automacao.js";
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
       } catch (error) {
-        console.error('Erro ao exportar:', error);
-        alert('Erro ao exportar código. Verifique se há blocos válidos no workspace.');
+        console.error("Erro ao exportar:", error);
+        alert("Erro ao exportar código. Verifique se há blocos válidos no workspace.");
       }
     }
   };
@@ -80,33 +83,27 @@ const handleSave = () => {
   const handleLoad = () => {
     if (workspaceRef.current) {
       try {
-        const savedXml = localStorage.getItem('blockly-workspace');
+        const savedXml = localStorage.getItem("blockly-workspace");
         if (savedXml) {
           const xml = Blockly.Xml.textToDom(savedXml);
           Blockly.Xml.domToWorkspace(xml, workspaceRef.current);
-          alert('Automação carregada com sucesso!');
+          alert("Automação carregada com sucesso!");
         } else {
-          alert('Nenhuma automação salva encontrada.');
+          alert("Nenhuma automação salva encontrada.");
         }
       } catch (error) {
-        console.error('Erro ao carregar:', error);
-        alert('Erro ao carregar automação salva.');
+        console.error("Erro ao carregar:", error);
+        alert("Erro ao carregar automação salva.");
       }
     }
   };
 
   const handleClear = () => {
-    if (workspaceRef.current && confirm('Tem certeza que deseja limpar o workspace?')) {
+    if (
+      workspaceRef.current &&
+      window.confirm("Tem certeza que deseja limpar o workspace?")
+    ) {
       workspaceRef.current.clear();
-    }
-  };
-        
-        localStorage.setItem('blockly-workspace', xmlText);
-        alert('Automação salva com sucesso!');
-      } catch (error) {
-        console.error('Erro ao salvar:', error);
-        alert('Erro ao salvar automação.');
-      }
     }
   };
 
@@ -163,8 +160,7 @@ const handleSave = () => {
               onClick={handleClear}
               className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-200 transform hover:scale-105"
             >
-              🗑️
-              Limpar
+              🗑️ Limpar
             </button>
           </div>
         </div>
@@ -172,12 +168,12 @@ const handleSave = () => {
 
       {/* Editor */}
       <div className="relative">
-        <div 
-          ref={blocklyDiv} 
+        <div
+          ref={blocklyDiv}
           className="h-[600px] w-full"
-          style={{ minHeight: '600px' }}
+          style={{ minHeight: "600px" }}
         />
-        
+
         {/* Overlay de ajuda */}
         <div className="absolute top-4 right-4 bg-black bg-opacity-70 text-white p-3 rounded-lg text-sm max-w-xs">
           <p className="font-semibold mb-1">💡 Dica:</p>
