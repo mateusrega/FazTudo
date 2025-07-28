@@ -26,14 +26,26 @@ export default function BlocklyEditor() {
     };
   }, []);
 
-  const handleSave = () => {
-    if (workspaceRef.current) {
+const handleSave = () => {
+  if (workspaceRef.current) {
+    try {
       const xml = Blockly.Xml.workspaceToDom(workspaceRef.current);
       const xmlText = Blockly.Xml.domToText(xml);
+
+      if (!xmlText || xmlText.includes('<xml xmlns="https://developers.google.com/blockly/xml"></xml>')) {
+        alert('Workspace vazio! Adicione alguns blocos antes de salvar.');
+        return;
+      }
+
       localStorage.setItem('blockly-workspace', xmlText);
       alert('Automação salva com sucesso!');
+    } catch (error) {
+      alert('Erro ao salvar a automação.');
+      console.error(error);
     }
-  };
+  }
+};
+
 
   const handleRun = () => {
     alert('Executando automação... (funcionalidade em desenvolvimento)');
@@ -87,17 +99,6 @@ export default function BlocklyEditor() {
       workspaceRef.current.clear();
     }
   };
-
-  const handleSave = () => {
-    if (workspaceRef.current) {
-      try {
-        const xml = Blockly.Xml.workspaceToDom(workspaceRef.current);
-        const xmlText = Blockly.Xml.domToText(xml);
-        
-        if (!xmlText || xmlText.includes('<xml xmlns="https://developers.google.com/blockly/xml"></xml>')) {
-          alert('Workspace vazio! Adicione alguns blocos antes de salvar.');
-          return;
-        }
         
         localStorage.setItem('blockly-workspace', xmlText);
         alert('Automação salva com sucesso!');
