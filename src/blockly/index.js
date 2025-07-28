@@ -2,6 +2,7 @@ import Blockly from "blockly";
 import { toolbox } from "./toolbox";
 import "./customBlocks";
 import { neonTheme } from "./theme";
+import "blockly/javascript";
 
 export function initBlockly(workspaceRef) {
   const workspace = Blockly.inject(workspaceRef, {
@@ -35,9 +36,14 @@ export function initBlockly(workspaceRef) {
 
   // Desativar completamente todos os sons
   workspace.getAudioManager().setVolume(0);
-  workspace.getAudioManager().play = function() { return null; };
-  workspace.getAudioManager().load = function() { return null; };
-  workspace.getAudioManager().preload = function() { return null; };
+  
+  // Sobrescrever métodos de áudio de forma mais segura
+  const audioManager = workspace.getAudioManager();
+  if (audioManager) {
+    audioManager.play = function() { return null; };
+    audioManager.load = function() { return null; };
+    audioManager.preload = function() { return null; };
+  }
 
   return workspace;
 }

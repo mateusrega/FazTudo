@@ -9,9 +9,8 @@ export default function Sidebar() {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
   const location = useLocation();
-  const modoTeste = localStorage.getItem("modoTeste") === "true";
 
-  const isAdmin = user && user.email === "admin@exemplo.com";
+  const isAdmin = user && user.uid === import.meta.env.VITE_ADMIN_UID;
 
   const handleLogout = async () => {
     try {
@@ -28,7 +27,7 @@ export default function Sidebar() {
     { path: "/feedback", icon: FaEnvelope, label: "Feedback", color: "text-purple-400" },
   ];
 
-  if (!modoTeste && isAdmin) {
+  if (isAdmin) {
     menuItems.push({ path: "/admin", icon: FaUserShield, label: "Admin", color: "text-red-400" });
   }
 

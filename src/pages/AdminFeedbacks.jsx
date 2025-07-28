@@ -20,7 +20,7 @@ const AdminFeedbacks = () => {
 
   useEffect(() => {
     if (!user) return;
-    if (user.uid !== ADMIN_UID) {
+    if (!ADMIN_UID || user.uid !== ADMIN_UID) {
       alert("Acesso restrito.");
       navigate("/dashboard");
       return;

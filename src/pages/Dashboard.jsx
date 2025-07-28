@@ -22,7 +22,7 @@ const Dashboard = () => {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            Bem-vindo, {user?.displayName || user?.email?.split('@')[0]}! 👋
+            Bem-vindo, {user?.displayName || user?.email?.split('@')?.[0] || 'Usuário'}! 👋
           </h1>
           <p className="text-gray-600 text-lg">
             Gerencie suas automações e acompanhe o desempenho

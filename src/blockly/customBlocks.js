@@ -1,3 +1,5 @@
+import Blockly from "blockly";
+
 Blockly.defineBlocksWithJsonArray([
   {
     type: "webhook_trigger",
@@ -38,4 +40,3 @@ Blockly.defineBlocksWithJsonArray([
     style: "acoes",
     tooltip: "Responde automaticamente"
   }
-]);
