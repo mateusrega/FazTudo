@@ -1,4 +1,3 @@
-// src/contexts/UserContext.jsx
 import React, { createContext, useState, useEffect } from "react";
 import { auth, db } from "../services/firebase";
 import { onAuthStateChanged } from "firebase/auth";
@@ -9,6 +8,10 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // Obter os UIDs dos administradores do arquivo .env
+  const adminUIDs = import.meta.env.VITE_ADMIN_UIDS?.split(",") || [];
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -16,6 +19,9 @@ export const UserProvider = ({ children }) => {
       setLoading(false);
 
       if (currentUser) {
+        // Verifica se o usuário é admin
+        setIsAdmin(adminUIDs.includes(currentUser.uid));
+
         const userRef = doc(db, "users", currentUser.uid);
         const snapshot = await getDoc(userRef);
         if (!snapshot.exists()) {
@@ -33,7 +39,7 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, loading }}>
+    <UserContext.Provider value={{ user, loading, isAdmin }}>
       {children}
     </UserContext.Provider>
   );
