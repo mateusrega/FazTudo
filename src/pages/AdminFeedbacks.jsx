@@ -16,11 +16,14 @@ const AdminFeedbacks = () => {
   const [feedbacks, setFeedbacks] = useState([]);
   const [userCount, setUserCount] = useState(0);
   const navigate = useNavigate();
-  const ADMIN_UID = import.meta.env.VITE_ADMIN_UID;
+
+  const adminUIDs = import.meta.env.VITE_ADMIN_UIDS?.split(",") || [];
 
   useEffect(() => {
     if (!user) return;
-    if (!ADMIN_UID || user.uid !== ADMIN_UID) {
+
+    const isAdmin = adminUIDs.includes(user.uid);
+    if (!isAdmin) {
       alert("Acesso restrito.");
       navigate("/dashboard");
       return;
@@ -29,7 +32,7 @@ const AdminFeedbacks = () => {
     const fetchFeedbacks = async () => {
       const q = query(collection(db, "feedbacks"), orderBy("createdAt", "desc"));
       const snapshot = await getDocs(q);
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       setFeedbacks(data);
     };
 
