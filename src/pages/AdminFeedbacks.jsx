@@ -1,5 +1,6 @@
 // src/pages/AdminFeedbacks.jsx
 import React, { useEffect, useState, useContext } from "react";
+import Sidebar from "../components/Sidebar";
 import { db } from "../services/firebase";
 import {
   collection,
@@ -46,7 +47,9 @@ const AdminFeedbacks = () => {
   }, [user]);
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="min-h-screen bg-gray-50">
+      <Sidebar />
+      <div className="ml-64 p-6 max-w-4xl">
       <h1 className="text-3xl font-bold mb-2">📋 Feedbacks Recebidos</h1>
       <p className="text-gray-600 mb-6">
         👥 Total de usuários registrados: <strong>{userCount}</strong>
@@ -71,6 +74,7 @@ const AdminFeedbacks = () => {
           ))}
         </ul>
       )}
+      </div>
     </div>
   );
 };

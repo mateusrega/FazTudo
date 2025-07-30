@@ -5,7 +5,7 @@ import { FaLightbulb, FaRocket } from "react-icons/fa";
 
 export default function Builder() {
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
       <Sidebar />
       <div className="flex-1 ml-64 p-8">
         {/* Header */}

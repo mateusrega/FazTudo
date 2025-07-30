@@ -36,7 +36,7 @@ export default function Sidebar() {
   }
 
   return (
-    <aside className={`min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white flex flex-col shadow-2xl transition-all duration-300 ease-in-out
+    <aside className={`fixed left-0 top-0 h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white flex flex-col shadow-2xl transition-all duration-300 ease-in-out z-50
       ${sidebarAberta ? "w-64" : "w-16"}`}>
 
       {/* Botão de toggle */}

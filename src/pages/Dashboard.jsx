@@ -14,9 +14,9 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
       <Sidebar />
-      <main className="flex-1 p-4 md:ml-64 md:p-8">
+      <main className="ml-64 p-4 md:p-8">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
