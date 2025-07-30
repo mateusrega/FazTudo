@@ -49,27 +49,29 @@ const AdminFeedbacks = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Sidebar />
-      <div className="ml-64 p-6 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-2">📋 Feedbacks Recebidos</h1>
-      <p className="text-gray-600 mb-6">
+      <div className="lg:ml-64 p-4 md:p-6 max-w-4xl">
+        <div className="pt-16 lg:pt-0">
+          <h1 className="text-2xl md:text-3xl font-bold mb-2">📋 Feedbacks Recebidos</h1>
+          <p className="text-gray-600 mb-6 text-sm md:text-base">
         👥 Total de usuários registrados: <strong>{userCount}</strong>
       </p>
+        </div>
 
       {feedbacks.length === 0 ? (
-        <p>Nenhum feedback enviado ainda.</p>
+        <p className="text-center text-gray-500 py-8">Nenhum feedback enviado ainda.</p>
       ) : (
         <ul className="space-y-4">
           {feedbacks.map(({ id, userId, mensagem, tipo, createdAt }) => (
             <li
               key={id}
-              className="border p-4 rounded-xl shadow bg-white hover:shadow-md transition-all"
+              className="border p-4 md:p-6 rounded-xl shadow bg-white hover:shadow-md transition-all"
             >
-              <p className="text-sm text-gray-400">
+              <p className="text-xs md:text-sm text-gray-400">
                 {createdAt?.toDate().toLocaleString() || "Sem data"}
               </p>
-              <p className="font-semibold">{tipo.toUpperCase()}</p>
-              <p className="mt-2">{mensagem}</p>
-              <p className="text-sm text-gray-500 mt-2">Usuário: {userId}</p>
+              <p className="font-semibold text-sm md:text-base">{tipo.toUpperCase()}</p>
+              <p className="mt-2 text-sm md:text-base">{mensagem}</p>
+              <p className="text-xs md:text-sm text-gray-500 mt-2 truncate">Usuário: {userId}</p>
             </li>
           ))}
         </ul>

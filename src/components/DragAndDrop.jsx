@@ -119,48 +119,48 @@ export default function BlocklyEditor() {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-2xl overflow-hidden">
+    <div className="bg-white rounded-xl shadow-2xl overflow-hidden mx-auto">
       {/* Toolbar */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold text-white flex items-center gap-2">
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-4 md:px-6 py-3 md:py-4">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <h2 className="text-lg md:text-xl font-bold text-white flex items-center gap-2">
             <FaCode className="text-yellow-300" />
             Editor Visual de Automações
           </h2>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-2 md:gap-3">
             <button
               onClick={handleLoad}
-              className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-200 transform hover:scale-105"
+              className="bg-indigo-500 hover:bg-indigo-600 text-white px-3 md:px-4 py-2 rounded-lg flex items-center gap-1 md:gap-2 transition-all duration-200 transform hover:scale-105 text-xs md:text-sm"
             >
               <FaDownload size={14} />
-              Carregar
+              <span className="hidden sm:inline">Carregar</span>
             </button>
             <button
               onClick={handleRun}
-              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-200 transform hover:scale-105"
+              className="bg-green-500 hover:bg-green-600 text-white px-3 md:px-4 py-2 rounded-lg flex items-center gap-1 md:gap-2 transition-all duration-200 transform hover:scale-105 text-xs md:text-sm"
             >
               <FaPlay size={14} />
-              Executar
+              <span className="hidden sm:inline">Executar</span>
             </button>
             <button
               onClick={handleSave}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-200 transform hover:scale-105"
+              className="bg-blue-500 hover:bg-blue-600 text-white px-3 md:px-4 py-2 rounded-lg flex items-center gap-1 md:gap-2 transition-all duration-200 transform hover:scale-105 text-xs md:text-sm"
             >
               <FaSave size={14} />
-              Salvar
+              <span className="hidden sm:inline">Salvar</span>
             </button>
             <button
               onClick={handleExport}
-              className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-200 transform hover:scale-105"
+              className="bg-purple-500 hover:bg-purple-600 text-white px-3 md:px-4 py-2 rounded-lg flex items-center gap-1 md:gap-2 transition-all duration-200 transform hover:scale-105 text-xs md:text-sm"
             >
               <FaDownload size={14} />
-              Exportar
+              <span className="hidden sm:inline">Exportar</span>
             </button>
             <button
               onClick={handleClear}
-              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-200 transform hover:scale-105"
+              className="bg-red-500 hover:bg-red-600 text-white px-3 md:px-4 py-2 rounded-lg flex items-center gap-1 md:gap-2 transition-all duration-200 transform hover:scale-105 text-xs md:text-sm"
             >
-              🗑️ Limpar
+              🗑️ <span className="hidden sm:inline">Limpar</span>
             </button>
           </div>
         </div>
@@ -170,14 +170,14 @@ export default function BlocklyEditor() {
       <div className="relative">
         <div
           ref={blocklyDiv}
-          className="h-[600px] w-full"
-          style={{ minHeight: "600px" }}
+          className="h-[400px] md:h-[600px] w-full"
+          style={{ minHeight: "400px" }}
         />
 
         {/* Overlay de ajuda */}
-        <div className="absolute top-4 right-4 bg-black bg-opacity-70 text-white p-3 rounded-lg text-sm max-w-xs">
-          <p className="font-semibold mb-1">💡 Dica:</p>
-          <p>Arraste os blocos da barra lateral para criar sua automação!</p>
+        <div className="absolute top-2 md:top-4 right-2 md:right-4 bg-black bg-opacity-70 text-white p-2 md:p-3 rounded-lg text-xs md:text-sm max-w-xs hidden md:block">
+          <p className="font-semibold mb-1 text-xs md:text-sm">💡 Dica:</p>
+          <p className="text-xs md:text-sm">Arraste os blocos da barra lateral para criar sua automação!</p>
         </div>
       </div>
     </div>

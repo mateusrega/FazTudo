@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import {
   FaHome, FaCogs, FaEnvelope, FaUserShield,
-  FaRocket, FaSignOutAlt, FaBars, FaChevronLeft
+  FaRocket, FaSignOutAlt, FaBars, FaChevronLeft, FaTimes
 } from "react-icons/fa";
 import { UserContext } from "../contexts/UserContext";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -13,7 +13,7 @@ export default function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [sidebarAberta, setSidebarAberta] = useState(true);
+  const [sidebarAberta, setSidebarAberta] = useState(false);
   const isAdmin = user && user.uid === import.meta.env.VITE_ADMIN_UID;
 
   const handleLogout = async () => {
@@ -36,81 +36,109 @@ export default function Sidebar() {
   }
 
   return (
-    <aside className={`fixed left-0 top-0 h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white flex flex-col shadow-2xl transition-all duration-300 ease-in-out z-50
-      ${sidebarAberta ? "w-64" : "w-16"}`}>
+    <>
+      {/* Overlay para mobile */}
+      {sidebarAberta && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={() => setSidebarAberta(false)}
+        />
+      )}
+      
+      <aside className={`fixed left-0 top-0 h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white flex flex-col shadow-2xl transition-all duration-300 ease-in-out z-50
+        ${sidebarAberta ? "w-64" : "w-16 lg:w-16"}
+        ${sidebarAberta ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}>
 
-      {/* Botão de toggle */}
-      <div className="flex items-center justify-between px-4 py-4 border-b border-gray-700">
-        <button onClick={() => setSidebarAberta(!sidebarAberta)} className="text-white text-xl">
-          {sidebarAberta ? <FaChevronLeft /> : <FaBars />}
-        </button>
-        {sidebarAberta && (
-          <div className="flex items-center gap-2">
-            <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-xl">
-              <FaRocket className="text-2xl text-white" />
+        {/* Botão de toggle */}
+        <div className="flex items-center justify-between px-4 py-4 border-b border-gray-700">
+          <button onClick={() => setSidebarAberta(!sidebarAberta)} className="text-white text-xl lg:block">
+            {sidebarAberta ? <FaTimes className="lg:hidden" /> : <FaBars />}
+            {!sidebarAberta && <FaChevronLeft className="hidden lg:block" />}
+          </button>
+          {sidebarAberta && (
+            <div className="flex items-center gap-2">
+              <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-xl">
+                <FaRocket className="text-2xl text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                  FazTudo
+                </h1>
+                <p className="text-xs text-gray-400">Automação</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                FazTudo
-              </h1>
-              <p className="text-xs text-gray-400">Automação</p>
+          )}
+        </div>
+
+        {/* Info do usuário */}
+        {user && sidebarAberta && (
+          <div className="px-6 py-4 border-b border-gray-700">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                <span className="text-sm font-bold">
+                  {user.email?.charAt(0).toUpperCase()}
+                </span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-white truncate">
+                  {user.displayName || user.email}
+                </p>
+                <p className="text-xs text-gray-400 truncate">{user.email}</p>
+              </div>
             </div>
           </div>
         )}
-      </div>
 
-      {/* Info do usuário */}
-      {user && sidebarAberta && (
-        <div className="px-6 py-4 border-b border-gray-700">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-              <span className="text-sm font-bold">
-                {user.email?.charAt(0).toUpperCase()}
-              </span>
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">
-                {user.displayName || user.email}
-              </p>
-              <p className="text-xs text-gray-400 truncate">{user.email}</p>
-            </div>
-          </div>
+        {/* Navegação */}
+        <nav className="flex-1 px-2 py-4">
+          <ul className="space-y-2">
+            {menuItems.map(({ path, icon: Icon, label, color }) => {
+              const isActive = location.pathname === path;
+              return (
+                <li key={path}>
+                  <button
+                    onClick={() => {
+                      navigate(path);
+                      // Fechar sidebar no mobile após navegar
+                      if (window.innerWidth < 1024) {
+                        setSidebarAberta(false);
+                      }
+                    }}
+                    className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200
+                      ${isActive
+                      ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg transform scale-105"
+                      : "hover:bg-gray-700 text-gray-300 hover:text-white hover:scale-105"}`}
+                  >
+                    <Icon className={`text-lg ${isActive ? "text-white" : color}`} />
+                    {sidebarAberta && <span className="font-medium">{label}</span>}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+
+        {/* Botão de sair */}
+        <div className="px-2 py-4 border-t border-gray-700">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-gray-300 hover:bg-red-600 hover:text-white transition-all duration-200"
+          >
+            <FaSignOutAlt className="text-lg" />
+            {sidebarAberta && <span className="font-medium">Sair</span>}
+          </button>
         </div>
-      )}
-
-      {/* Navegação */}
-      <nav className="flex-1 px-2 py-4">
-        <ul className="space-y-2">
-          {menuItems.map(({ path, icon: Icon, label, color }) => {
-            const isActive = location.pathname === path;
-            return (
-              <li key={path}>
-                <button
-                  onClick={() => navigate(path)}
-                  className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200
-                    ${isActive
-                    ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg transform scale-105"
-                    : "hover:bg-gray-700 text-gray-300 hover:text-white hover:scale-105"}`}
-                >
-                  <Icon className={`text-lg ${isActive ? "text-white" : color}`} />
-                  {sidebarAberta && <span className="font-medium">{label}</span>}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
-
-      {/* Botão de sair */}
-      <div className="px-2 py-4 border-t border-gray-700">
+      </aside>
+      
+      {/* Botão flutuante para abrir menu no mobile */}
+      {!sidebarAberta && (
         <button
-          onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-gray-300 hover:bg-red-600 hover:text-white transition-all duration-200"
+          onClick={() => setSidebarAberta(true)}
+          className="fixed top-4 left-4 z-40 lg:hidden bg-gradient-to-r from-blue-600 to-purple-600 text-white p-3 rounded-xl shadow-lg"
         >
-          <FaSignOutAlt className="text-lg" />
-          {sidebarAberta && <span className="font-medium">Sair</span>}
+          <FaBars />
         </button>
-      </div>
-    </aside>
+      )}
+    </>
   );
 }

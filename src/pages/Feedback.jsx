@@ -45,48 +45,48 @@ const Feedback = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Sidebar />
-      <main className="flex-1 ml-64 p-8">
+      <main className="flex-1 lg:ml-64 p-4 md:p-8">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+        <div className="mb-6 md:mb-8 pt-16 lg:pt-0">
+          <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">
             💬 Enviar Feedback
           </h1>
-          <p className="text-gray-600 text-lg">
+          <p className="text-gray-600 text-sm md:text-lg">
             Sua opinião é muito importante para melhorarmos o FazTudo!
           </p>
         </div>
 
-        <div className="max-w-2xl">
+        <div className="max-w-2xl mx-auto lg:mx-0">
           {/* Tipo de Feedback */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
+          <div className="bg-white rounded-2xl shadow-lg p-4 md:p-6 mb-4 md:mb-6">
             <h2 className="text-xl font-bold text-gray-900 mb-4">
               Tipo de Feedback
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
               {tipoOptions.map(({ value, label, icon: Icon, color }) => (
                 <button
                   key={value}
                   onClick={() => setTipo(value)}
-                  className={`p-4 rounded-xl border-2 transition-all duration-200 transform hover:scale-105 ${
+                  className={`p-3 md:p-4 rounded-xl border-2 transition-all duration-200 transform hover:scale-105 ${
                     tipo === value
                       ? `bg-gradient-to-r ${color} text-white border-transparent shadow-lg`
                       : 'bg-gray-50 text-gray-700 border-gray-200 hover:border-gray-300'
                   }`}
                 >
-                  <Icon className={`text-2xl mb-2 mx-auto ${tipo === value ? 'text-white' : 'text-gray-400'}`} />
-                  <p className="font-semibold">{label}</p>
+                  <Icon className={`text-xl md:text-2xl mb-2 mx-auto ${tipo === value ? 'text-white' : 'text-gray-400'}`} />
+                  <p className="font-semibold text-sm md:text-base">{label}</p>
                 </button>
               ))}
             </div>
           </div>
 
           {/* Mensagem */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
+          <div className="bg-white rounded-2xl shadow-lg p-4 md:p-6 mb-4 md:mb-6">
             <h2 className="text-xl font-bold text-gray-900 mb-4">
               Sua Mensagem
             </h2>
             <textarea
-              className="w-full h-40 p-4 border border-gray-300 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              className="w-full h-32 md:h-40 p-3 md:p-4 border border-gray-300 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm md:text-base"
               value={mensagem}
               onChange={(e) => setMensagem(e.target.value)}
               placeholder={
@@ -111,7 +111,7 @@ const Feedback = () => {
           <button
             onClick={enviarFeedback}
             disabled={enviando || !mensagem.trim()}
-            className={`w-full py-4 px-6 rounded-xl font-semibold text-white transition-all duration-200 transform hover:scale-105 flex items-center justify-center gap-3 ${
+            className={`w-full py-3 md:py-4 px-6 rounded-xl font-semibold text-white transition-all duration-200 transform hover:scale-105 flex items-center justify-center gap-3 text-sm md:text-base ${
               enviando || !mensagem.trim()
                 ? 'bg-gray-400 cursor-not-allowed'
                 : 'bg-gradient-to-r from-green-500 to-green-600 hover:shadow-lg'
@@ -131,8 +131,8 @@ const Feedback = () => {
           </button>
 
           {/* Info adicional */}
-          <div className="mt-6 bg-blue-50 border border-blue-200 rounded-2xl p-6">
-            <h3 className="font-bold text-blue-900 mb-2">📋 Informações importantes:</h3>
+          <div className="mt-4 md:mt-6 bg-blue-50 border border-blue-200 rounded-2xl p-4 md:p-6">
+            <h3 className="font-bold text-blue-900 mb-2 text-sm md:text-base">📋 Informações importantes:</h3>
             <ul className="text-blue-800 text-sm space-y-1">
               <li>• Seu feedback é anônimo e seguro</li>
               <li>• Respondemos a sugestões em até 48h</li>
