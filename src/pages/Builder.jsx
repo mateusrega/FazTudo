@@ -22,8 +22,13 @@ export default function Builder() {
             Use o editor visual para criar automações poderosas sem programar
           </p>
         </div>
-
-        {/* Tips Card */}
+        {/* Editor */}
+        <DragAndDrop />
+      </div>
+    </div>
+  );
+} 
+{/* Tips Card */}
         <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-2xl p-6 mb-8">
           <div className="flex items-start gap-4">
             <div className="bg-yellow-100 p-2 rounded-xl">
@@ -40,10 +45,3 @@ export default function Builder() {
             </div>
           </div>
         </div>
-
-        {/* Editor */}
-        <DragAndDrop />
-      </div>
-    </div>
-  );
-}
