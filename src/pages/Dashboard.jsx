@@ -10,9 +10,7 @@ const Dashboard = () => {
 
   const stats = [
     { icon: FaRocket, label: "Automações Ativas", value: "0", color: "from-blue-500 to-blue-600" },
-    { icon: FaPlay, label: "Execuções Hoje", value: "0", color: "from-green-500 to-green-600" },
-    { icon: FaClock, label: "Tempo Economizado", value: "0h", color: "from-purple-500 to-purple-600" },
-    { icon: FaChartLine, label: "Taxa de Sucesso", value: "0%", color: "from-orange-500 to-orange-600" },
+    { icon: FaPlay, label: "Execuções Hoje", value: "0", color: "from-green-500 to-green-600" }
   ];
 
   return (
