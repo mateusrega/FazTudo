@@ -56,30 +56,32 @@ export default function Sidebar() {
   onClick={() => setSidebarAberta(!sidebarAberta)}
   className="text-white text-xl"
 >
-  {/* Mobile: mostrar X para fechar se aberta */}
-  {sidebarAberta && (
-    <FaTimes className="lg:hidden" />
-  )}
-  {/* Desktop: mostrar seta para contrair */}
-  {!sidebarAberta && (
-    <FaChevronLeft className="hidden lg:block" />
-  )}
-</button>
-          {sidebarAberta && (
-            <div className="flex items-center gap-2">
-              <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-xl">
-                <FaRocket className="text-2xl text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                  FazTudo
-                </h1>
-                <p className="text-xs text-gray-400">Automação</p>
-              </div>
-            </div>
-          )}
-        </div>
+<div className="flex items-center justify-between px-4 py-4 border-b border-gray-700">
+  <button onClick={() => setSidebarAberta(!sidebarAberta)} className="text-white text-xl">
+    {/* Mobile: mostrar X se aberta */}
+    {sidebarAberta && <FaTimes className="lg:hidden" />}
 
+    {/* Desktop: mostrar seta ⇦ para recolher se aberta, ou ≡ se fechada */}
+    <span className="hidden lg:inline">
+      {sidebarAberta ? <FaChevronLeft /> : <FaBars />}
+    </span>
+  </button>
+
+  {/* Mostrar logo e texto só se a sidebar estiver aberta */}
+  {sidebarAberta && (
+    <div className="flex items-center gap-2">
+      <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-xl">
+        <FaRocket className="text-2xl text-white" />
+      </div>
+      <div>
+        <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          FazTudo
+        </h1>
+        <p className="text-xs text-gray-400">Automação</p>
+      </div>
+    </div>
+  )}
+</div>
         {/* Info do usuário */}
         {user && sidebarAberta && (
           <div className="px-6 py-4 border-b border-gray-700">
