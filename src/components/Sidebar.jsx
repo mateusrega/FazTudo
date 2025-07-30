@@ -51,10 +51,20 @@ export default function Sidebar() {
 
         {/* Botão de toggle */}
         <div className="flex items-center justify-between px-4 py-4 border-b border-gray-700">
-          <button onClick={() => setSidebarAberta(!sidebarAberta)} className="text-white text-xl lg:block">
-            {sidebarAberta ? <FaTimes className="lg:hidden" /> : <FaBars />}
-            {!sidebarAberta && <FaChevronLeft className="hidden lg:block" />}
-          </button>
+{/* Botão no topo da sidebar */}
+<button
+  onClick={() => setSidebarAberta(!sidebarAberta)}
+  className="text-white text-xl"
+>
+  {/* Mobile: mostrar X para fechar se aberta */}
+  {sidebarAberta && (
+    <FaTimes className="lg:hidden" />
+  )}
+  {/* Desktop: mostrar seta para contrair */}
+  {!sidebarAberta && (
+    <FaChevronLeft className="hidden lg:block" />
+  )}
+</button>
           {sidebarAberta && (
             <div className="flex items-center gap-2">
               <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-xl">
