@@ -77,15 +77,31 @@ const AdminFeedbacks = () => {
     await updateDoc(docRef, { [field]: newValue });
   };
 
-  const categorias = Array.from(new Set(feedbacks.map((f) => f.tipo)));
-  const categoriasComContagem = categorias.map((cat) => ({
-    nome: cat,
-    count: feedbacks.filter((f) => f.tipo === cat).length,
-  }));
+  const categorias = [
+    ...new Set(feedbacks.map((f) => f.tipo)),
+    "Favoritos",
+    "Vistos",
+  ];
 
-  const feedbacksFiltrados = categoriaSelecionada === "Todos"
-    ? feedbacks
-    : feedbacks.filter((f) => f.tipo === categoriaSelecionada);
+  const categoriasComContagem = categorias.map((cat) => {
+    let count = 0;
+    if (cat === "Favoritos") count = feedbacks.filter((f) => f.favorito).length;
+    else if (cat === "Vistos") count = feedbacks.filter((f) => f.visto).length;
+    else count = feedbacks.filter((f) => f.tipo === cat).length;
+    return { nome: cat, count };
+  });
+
+  let feedbacksFiltrados = feedbacks;
+
+  if (categoriaSelecionada === "Favoritos") {
+    feedbacksFiltrados = feedbacks.filter((f) => f.favorito);
+  } else if (categoriaSelecionada === "Vistos") {
+    feedbacksFiltrados = feedbacks.filter((f) => f.visto);
+  } else if (categoriaSelecionada !== "Todos") {
+    feedbacksFiltrados = feedbacks.filter((f) => f.tipo === categoriaSelecionada && !f.visto && !f.favorito);
+  } else {
+    feedbacksFiltrados = feedbacks.filter((f) => !f.visto && !f.favorito);
+  }
 
   const feedbacksPorData = feedbacksFiltrados.reduce((acc, feedback) => {
     const data = feedback.createdAt?.toDate().toLocaleDateString() || "Sem data";
@@ -111,7 +127,7 @@ const AdminFeedbacks = () => {
                 categoriaSelecionada === "Todos" ? "bg-blue-600 text-white" : "bg-white text-gray-700"
               }`}
             >
-              Todos ({feedbacks.length})
+              Todos ({feedbacks.filter(f => !f.visto && !f.favorito).length})
             </button>
             {categoriasComContagem.map(({ nome, count }) => (
               <button
@@ -127,8 +143,8 @@ const AdminFeedbacks = () => {
           </div>
         </div>
 
-        {feedbacks.length === 0 ? (
-          <p className="text-center text-gray-500 py-8">Nenhum feedback enviado ainda.</p>
+        {feedbacksFiltrados.length === 0 ? (
+          <p className="text-center text-gray-500 py-8">Nenhum feedback nesta categoria.</p>
         ) : (
           Object.entries(feedbacksPorData).map(([data, items]) => (
             <div key={data} className="mb-8">
@@ -153,7 +169,9 @@ const AdminFeedbacks = () => {
                         </button>
                       </div>
                     </div>
-                    <p className="mt-2 text-sm md:text-base">{mensagem}</p>
+                    <div className="mt-2 text-sm md:text-base whitespace-pre-line">
+                      {mensagem}
+                    </div>
                     <p className="text-xs text-gray-500 mt-2 truncate">
                       Usuário: {usersMap[userId] || userId}
                     </p>
