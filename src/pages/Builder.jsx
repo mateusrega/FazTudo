@@ -26,8 +26,7 @@ export default function Builder() {
         <DragAndDrop />
       </div>
     </div>
-  );
-} 
+
 {/* Tips Card */}
         <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-2xl p-6 mb-8">
           <div className="flex items-start gap-4">
@@ -45,3 +44,5 @@ export default function Builder() {
             </div>
           </div>
         </div>
+);
+} 
