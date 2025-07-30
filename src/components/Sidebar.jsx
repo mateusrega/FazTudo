@@ -14,7 +14,10 @@ export default function Sidebar() {
   const location = useLocation();
 
   const [sidebarAberta, setSidebarAberta] = useState(false);
-  const isAdmin = user && user.uid === import.meta.env.VITE_ADMIN_UID;
+
+  // ✅ Adaptação: suporte a múltiplos UIDs no .env
+  const adminUIDs = (import.meta.env.VITE_ADMIN_UIDS || "").split(",");
+  const isAdmin = user && adminUIDs.includes(user.uid);
 
   const handleLogout = async () => {
     try {
