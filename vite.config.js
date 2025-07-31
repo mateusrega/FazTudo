@@ -3,6 +3,12 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
+  define: {
+    global: 'globalThis',
+  },
+  optimizeDeps: {
+    include: ['blockly', 'blockly/generators/javascript']
+  },
   plugins: [
     react(),
     VitePWA({
@@ -27,5 +33,14 @@ export default defineConfig({
         ]
       }
     })
-  ]
+  ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          blockly: ['blockly']
+        }
+      }
+    }
+  }
 });

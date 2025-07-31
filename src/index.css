@@ -170,6 +170,23 @@ button:focus {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Botões customizados para o Blockly Editor */
+.btn-indigo {
+  @apply bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200;
+}
+
+.btn-blue {
+  @apply bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200;
+}
+
+.btn-purple {
+  @apply bg-purple-500 hover:bg-purple-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200;
+}
+
+.btn-red {
+  @apply bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200;
+}
+
 /* Responsive design helpers */
 @media (max-width: 768px) {
   .mobile-hidden {

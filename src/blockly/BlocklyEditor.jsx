@@ -1,9 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Blockly from "blockly";
+import "blockly/generators/javascript";
 import { FaPlay, FaSave, FaDownload, FaCode } from "react-icons/fa";
-
-// Importante: adapte o caminho do initBlockly se você tiver um arquivo para inicializar o Blockly
-// ou substitua pelo código de inicialização direto aqui
 
 function initBlockly(div) {
   return Blockly.inject(div, {
@@ -63,7 +61,23 @@ export default function BlocklyEditor() {
 
   const handleExport = () => {
     if (!workspaceRef.current) return;
-    const code = Blockly.JavaScript.workspaceToCode(workspaceRef.current);
+    
+    let code;
+    try {
+      // Tentar usar o novo formato primeiro
+      if (Blockly.JavaScript) {
+        code = Blockly.JavaScript.workspaceToCode(workspaceRef.current);
+      } else if (Blockly.generators && Blockly.generators.JavaScript) {
+        code = Blockly.generators.JavaScript.workspaceToCode(workspaceRef.current);
+      } else {
+        throw new Error("Gerador JavaScript não encontrado");
+      }
+    } catch (error) {
+      console.error("Erro ao gerar código:", error);
+      alert("Erro ao gerar código JavaScript.");
+      return;
+    }
+    
     if (!code.trim()) {
       alert("Nenhum código para exportar.");
       return;

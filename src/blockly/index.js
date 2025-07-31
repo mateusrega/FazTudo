@@ -1,8 +1,8 @@
 import Blockly from "blockly";
-import { toolbox } from "./toolbox";
-import "./customBlocks";
-import { neonTheme } from "./theme";
-import "blockly/javascript";
+import { toolbox } from "./toolbox.js";
+import "./customBlocks.js";
+import { neonTheme } from "./theme.js";
+import "blockly/generators/javascript";
 
 export function initBlockly(workspaceRef) {
   const workspace = Blockly.inject(workspaceRef, {
@@ -37,12 +37,16 @@ export function initBlockly(workspaceRef) {
   // Desativar completamente todos os sons
   workspace.getAudioManager().setVolume(0);
   
-  // Sobrescrever métodos de áudio de forma mais segura
-  const audioManager = workspace.getAudioManager();
-  if (audioManager) {
-    audioManager.play = function() { return null; };
-    audioManager.load = function() { return null; };
-    audioManager.preload = function() { return null; };
+  // Sobrescrever métodos de áudio de forma mais segura  
+  try {
+    const audioManager = workspace.getAudioManager();
+    if (audioManager) {
+      audioManager.play = function() { return null; };
+      audioManager.load = function() { return null; };
+      audioManager.preload = function() { return null; };
+    }
+  } catch (error) {
+    console.warn("Não foi possível desabilitar áudio:", error);
   }
 
   return workspace;
