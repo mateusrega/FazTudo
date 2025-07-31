@@ -396,9 +396,10 @@ const AdminFeedbacks = () => {
                                 </span>
                               )}
                             </div>
-                            <p className="text-gray-900 mb-3 whitespace-pre-line leading-relaxed">
-                            {mensagem}
-                            </p>
+                           <p className="text-gray-900 mb-3 whitespace-pre-wrap break-words leading-relaxed max-w-full">
+  {mensagem}
+</p>
+
 
                             <div className="flex items-center gap-2 text-xs text-gray-500">
                               <FaUsers className="text-gray-400" />
