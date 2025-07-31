@@ -1,3 +1,4 @@
+// src/pages/AdminFeedbacks.jsx
 import React, { useEffect, useState, useContext } from "react";
 import Sidebar from "../components/Sidebar";
 import { db } from "../services/firebase";
@@ -12,7 +13,7 @@ import {
 } from "firebase/firestore";
 import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
-import { FaStar, FaRegStar, FaCheckCircle, FaRegCircle } from "react-icons/fa";
+import { FaStar, FaRegStar, FaCheckCircle, FaRegCircle, FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 const AdminFeedbacks = () => {
   const { user } = useContext(UserContext);
@@ -20,6 +21,8 @@ const AdminFeedbacks = () => {
   const [userCount, setUserCount] = useState(0);
   const [usersMap, setUsersMap] = useState({});
   const [categoriaSelecionada, setCategoriaSelecionada] = useState("Todos");
+  const [mostrarCategorias, setMostrarCategorias] = useState(false);
+  const [mostrarEmails, setMostrarEmails] = useState(false);
 
   const navigate = useNavigate();
   const adminUIDs = import.meta.env.VITE_ADMIN_UIDS?.split(",") || [];
@@ -77,31 +80,17 @@ const AdminFeedbacks = () => {
     await updateDoc(docRef, { [field]: newValue });
   };
 
-  const categorias = [
-    ...new Set(feedbacks.map((f) => f.tipo)),
-    "Favoritos",
-    "Vistos",
-  ];
-
+  const categorias = Array.from(new Set(feedbacks.map((f) => f.tipo)));
   const categoriasComContagem = categorias.map((cat) => {
-    let count = 0;
-    if (cat === "Favoritos") count = feedbacks.filter((f) => f.favorito).length;
-    else if (cat === "Vistos") count = feedbacks.filter((f) => f.visto).length;
-    else count = feedbacks.filter((f) => f.tipo === cat).length;
-    return { nome: cat, count };
+    const filtrados = feedbacks.filter((f) => f.tipo === cat && !f.visto);
+    return { nome: cat, count: filtrados.length };
   });
 
-  let feedbacksFiltrados = feedbacks;
-
-  if (categoriaSelecionada === "Favoritos") {
-    feedbacksFiltrados = feedbacks.filter((f) => f.favorito);
-  } else if (categoriaSelecionada === "Vistos") {
-    feedbacksFiltrados = feedbacks.filter((f) => f.visto);
-  } else if (categoriaSelecionada !== "Todos") {
-    feedbacksFiltrados = feedbacks.filter((f) => f.tipo === categoriaSelecionada && !f.visto && !f.favorito);
-  } else {
-    feedbacksFiltrados = feedbacks.filter((f) => !f.visto && !f.favorito);
-  }
+  const feedbacksFiltrados = feedbacks.filter(
+    (f) =>
+      !f.visto &&
+      (categoriaSelecionada === "Todos" || f.tipo === categoriaSelecionada)
+  );
 
   const feedbacksPorData = feedbacksFiltrados.reduce((acc, feedback) => {
     const data = feedback.createdAt?.toDate().toLocaleDateString() || "Sem data";
@@ -110,41 +99,82 @@ const AdminFeedbacks = () => {
     return acc;
   }, {});
 
+  const listaEmails = Object.values(usersMap);
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Sidebar />
       <div className="lg:ml-64 p-4 md:p-6 max-w-5xl">
         <div className="pt-16 lg:pt-0">
           <h1 className="text-2xl md:text-3xl font-bold mb-2">📋 Feedbacks Recebidos</h1>
-          <p className="text-gray-600 mb-4 text-sm md:text-base">
-            👥 Total de usuários registrados: <strong>{userCount}</strong>
-          </p>
-
-          <div className="flex flex-wrap gap-2 mb-6">
+          <div className="flex items-center gap-2 mb-2">
+            <p className="text-gray-600 text-sm md:text-base">
+              👥 Total de usuários registrados: <strong>{userCount}</strong>
+            </p>
             <button
-              onClick={() => setCategoriaSelecionada("Todos")}
-              className={`px-3 py-1 rounded-full border ${
-                categoriaSelecionada === "Todos" ? "bg-blue-600 text-white" : "bg-white text-gray-700"
-              }`}
+              onClick={() => setMostrarEmails((prev) => !prev)}
+              className="text-blue-600 text-sm underline"
             >
-              Todos ({feedbacks.filter(f => !f.visto && !f.favorito).length})
+              {mostrarEmails ? "Ocultar emails" : "Mostrar emails"}
             </button>
-            {categoriasComContagem.map(({ nome, count }) => (
-              <button
-                key={nome}
-                onClick={() => setCategoriaSelecionada(nome)}
-                className={`px-3 py-1 rounded-full border ${
-                  categoriaSelecionada === nome ? "bg-blue-600 text-white" : "bg-white text-gray-700"
-                }`}
-              >
-                {nome} ({count})
-              </button>
-            ))}
+          </div>
+          {mostrarEmails && (
+            <ul className="mb-4 list-disc pl-6 text-sm text-gray-700">
+              {listaEmails.map((email, i) => (
+                <li key={i}>{email}</li>
+              ))}
+            </ul>
+          )}
+
+          <div className="mb-6">
+            <button
+              onClick={() => setMostrarCategorias((prev) => !prev)}
+              className="flex items-center gap-2 text-sm font-medium text-blue-600"
+            >
+              {mostrarCategorias ? (
+                <>
+                  <FaChevronUp />
+                  Ocultar categorias
+                </>
+              ) : (
+                <>
+                  <FaChevronDown />
+                  Filtrar por categoria
+                </>
+              )}
+            </button>
+            {mostrarCategorias && (
+              <div className="flex flex-wrap gap-2 mt-3">
+                <button
+                  onClick={() => setCategoriaSelecionada("Todos")}
+                  className={`px-3 py-1 rounded-full border ${
+                    categoriaSelecionada === "Todos"
+                      ? "bg-blue-600 text-white"
+                      : "bg-white text-gray-700"
+                  }`}
+                >
+                  Todos ({feedbacksFiltrados.length})
+                </button>
+                {categoriasComContagem.map(({ nome, count }) => (
+                  <button
+                    key={nome}
+                    onClick={() => setCategoriaSelecionada(nome)}
+                    className={`px-3 py-1 rounded-full border ${
+                      categoriaSelecionada === nome
+                        ? "bg-blue-600 text-white"
+                        : "bg-white text-gray-700"
+                    }`}
+                  >
+                    {nome} ({count})
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
         {feedbacksFiltrados.length === 0 ? (
-          <p className="text-center text-gray-500 py-8">Nenhum feedback nesta categoria.</p>
+          <p className="text-center text-gray-500 py-8">Nenhum feedback disponível.</p>
         ) : (
           Object.entries(feedbacksPorData).map(([data, items]) => (
             <div key={data} className="mb-8">
@@ -169,9 +199,7 @@ const AdminFeedbacks = () => {
                         </button>
                       </div>
                     </div>
-                    <div className="mt-2 text-sm md:text-base whitespace-pre-line">
-                      {mensagem}
-                    </div>
+                    <pre className="mt-2 text-sm md:text-base whitespace-pre-wrap">{mensagem}</pre>
                     <p className="text-xs text-gray-500 mt-2 truncate">
                       Usuário: {usersMap[userId] || userId}
                     </p>
