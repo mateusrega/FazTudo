@@ -1,6 +1,7 @@
 import React from "react";
 import BlocklyEditor from "../blockly/BlocklyEditor"; // importa seu editor Blockly real
 import Sidebar from "../components/Sidebar";
+import VoiceRecorder from "../components/VoiceRecorder"; // 🎙️ novo componente
 import { FaLightbulb, FaRocket } from "react-icons/fa";
 
 export default function Builder() {
@@ -22,9 +23,20 @@ export default function Builder() {
             Use o editor visual para criar automações poderosas sem programar
           </p>
         </div>
+
         {/* Editor */}
-        <BlocklyEditor />  {/* usa seu editor Blockly aqui */}
-      
+        <BlocklyEditor />
+
+        {/* Voice Recorder */}
+        <div className="mt-6">
+          <VoiceRecorder
+            onResult={(texto) => {
+              console.log("Comando de voz:", texto);
+              // Aqui você pode interpretar comandos de voz no futuro
+            }}
+          />
+        </div>
+
         {/* Tips Card */}
         <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-2xl p-4 md:p-6 mb-6 md:mb-8 mt-6">
           <div className="flex items-start gap-4">
@@ -42,6 +54,7 @@ export default function Builder() {
             </div>
           </div>
         </div>
+
       </div>
     </div>
   );
