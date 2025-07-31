@@ -21,6 +21,9 @@ import {
   FaChevronUp,
 } from "react-icons/fa";
 
+const removerAcentos = (str) =>
+  str.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+
 const AdminFeedbacks = () => {
   const { user } = useContext(UserContext);
   const [feedbacks, setFeedbacks] = useState([]);
@@ -86,11 +89,11 @@ const AdminFeedbacks = () => {
     await updateDoc(docRef, { [field]: newValue });
   };
 
-  const categoriasFixas = ["Elogio", "Sugestão", "Bug"];
+  const categoriasFixas = ["Elogio", "Sugestao", "Bug"];
   const contagemPorCategoria = (categoria) =>
     feedbacks.filter(
       (f) =>
-        f.tipo?.toLowerCase() === categoria.toLowerCase() &&
+        removerAcentos(f.tipo || "") === removerAcentos(categoria) &&
         !f.visto
     ).length;
 
@@ -98,7 +101,10 @@ const AdminFeedbacks = () => {
     if (categoriaSelecionada === "Todos") return !f.visto;
     if (categoriaSelecionada === "Favoritos") return f.favorito && !f.visto;
     if (categoriaSelecionada === "Vistos") return f.visto;
-    return f.tipo?.toLowerCase() === categoriaSelecionada.toLowerCase() && !f.visto;
+    return (
+      removerAcentos(f.tipo || "") === removerAcentos(categoriaSelecionada) &&
+      !f.visto
+    );
   });
 
   const feedbacksPorData = feedbacksVisiveis.reduce((acc, feedback) => {
