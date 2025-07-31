@@ -1,4 +1,3 @@
-// src/pages/AdminFeedbacks.jsx
 import React, { useEffect, useState, useContext } from "react";
 import Sidebar from "../components/Sidebar";
 import { db } from "../services/firebase";
@@ -13,7 +12,11 @@ import {
 } from "firebase/firestore";
 import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
-import { FaStar, FaRegStar, FaCheckCircle, FaRegCircle, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import {
+  FaStar, FaRegStar,
+  FaCheckCircle, FaRegCircle,
+  FaChevronDown, FaChevronUp,
+} from "react-icons/fa";
 
 const AdminFeedbacks = () => {
   const { user } = useContext(UserContext);
@@ -21,8 +24,8 @@ const AdminFeedbacks = () => {
   const [userCount, setUserCount] = useState(0);
   const [usersMap, setUsersMap] = useState({});
   const [categoriaSelecionada, setCategoriaSelecionada] = useState("Todos");
-  const [mostrarCategorias, setMostrarCategorias] = useState(false);
-  const [mostrarEmails, setMostrarEmails] = useState(false);
+  const [expandirCategorias, setExpandirCategorias] = useState(false);
+  const [mostrarListaEmails, setMostrarListaEmails] = useState(false);
 
   const navigate = useNavigate();
   const adminUIDs = import.meta.env.VITE_ADMIN_UIDS?.split(",") || [];
@@ -80,26 +83,18 @@ const AdminFeedbacks = () => {
     await updateDoc(docRef, { [field]: newValue });
   };
 
-  const categoriasFixas = ["Elogio", "Sugestão", "Bug", "Favorito", "Vistos", "Todos"];
-
-  const contagemPorCategoria = (categoria) => {
-    if (categoria === "Todos") {
-      return feedbacks.filter((f) => !f.visto).length;
-    } else if (categoria === "Vistos") {
-      return feedbacks.filter((f) => f.visto).length;
-    } else if (categoria === "Favorito") {
-      return feedbacks.filter((f) => f.favorito && !f.visto).length;
-    } else {
-      return feedbacks.filter((f) => f.tipo === categoria && !f.visto).length;
-    }
-  };
-
-  const feedbacksFiltrados = feedbacks.filter((f) => {
-    if (categoriaSelecionada === "Todos") return !f.visto;
+  const categoriasFixas = ["Elogio", "Sugestão", "Bug"];
+  const feedbacksVisiveis = feedbacks.filter(f => !f.visto || categoriaSelecionada === "Vistos");
+  
+  const feedbacksFiltrados = feedbacksVisiveis.filter((f) => {
+    if (categoriaSelecionada === "Todos") return true;
+    if (categoriaSelecionada === "Favoritos") return f.favorito && !f.visto;
     if (categoriaSelecionada === "Vistos") return f.visto;
-    if (categoriaSelecionada === "Favorito") return f.favorito && !f.visto;
     return f.tipo === categoriaSelecionada && !f.visto;
   });
+
+  const contagemPorCategoria = (categoria) =>
+    feedbacks.filter(f => f.tipo === categoria && !f.visto).length;
 
   const feedbacksPorData = feedbacksFiltrados.reduce((acc, feedback) => {
     const data = feedback.createdAt?.toDate().toLocaleDateString() || "Sem data";
@@ -108,6 +103,8 @@ const AdminFeedbacks = () => {
     return acc;
   }, {});
 
+  const todosEmails = Object.values(usersMap);
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Sidebar />
@@ -115,61 +112,87 @@ const AdminFeedbacks = () => {
         <div className="pt-16 lg:pt-0">
           <h1 className="text-2xl md:text-3xl font-bold mb-2">📋 Feedbacks Recebidos</h1>
 
-          <div className="flex flex-wrap items-center gap-4 mb-4">
+          <div className="flex items-center justify-between mb-2">
             <p className="text-gray-600 text-sm md:text-base">
               👥 Total de usuários registrados: <strong>{userCount}</strong>
             </p>
-
             <button
-              onClick={() => setMostrarEmails((prev) => !prev)}
-              className="text-blue-600 text-sm underline"
+              onClick={() => setMostrarListaEmails(!mostrarListaEmails)}
+              className="text-sm text-blue-600 underline"
             >
-              {mostrarEmails ? "Ocultar e-mails" : "Mostrar e-mails"}
+              {mostrarListaEmails ? "Ocultar e-mails" : "Mostrar e-mails"}
             </button>
           </div>
 
-          {mostrarEmails && (
-            <div className="bg-white border rounded p-3 mb-6 max-h-40 overflow-y-auto text-sm text-gray-700">
-              {Object.values(usersMap).map((email, i) => (
-                <div key={i}>{email}</div>
-              ))}
+          {mostrarListaEmails && (
+            <div className="bg-white p-3 mb-4 rounded border max-h-40 overflow-y-auto text-sm">
+              <ul className="list-disc list-inside space-y-1">
+                {todosEmails.map((email, idx) => (
+                  <li key={idx}>{email}</li>
+                ))}
+              </ul>
             </div>
           )}
 
-          <button
-            onClick={() => setMostrarCategorias(!mostrarCategorias)}
-            className="flex items-center gap-2 mb-4 px-3 py-2 border rounded text-sm bg-white hover:bg-gray-100"
-          >
-            {mostrarCategorias ? <FaChevronUp /> : <FaChevronDown />}
-            {categoriaSelecionada === "Todos"
-              ? "Selecionar categoria"
-              : `Categoria: ${categoriaSelecionada}`}
-          </button>
+          <div className="flex flex-wrap gap-2 mb-6">
+            <button
+              onClick={() => setCategoriaSelecionada("Todos")}
+              className={`px-3 py-1 rounded-full border ${
+                categoriaSelecionada === "Todos" ? "bg-blue-600 text-white" : "bg-white text-gray-700"
+              }`}
+            >
+              Todos ({feedbacks.filter(f => !f.visto).length})
+            </button>
 
-          {mostrarCategorias && (
-            <div className="flex flex-wrap gap-2 mb-6">
-              {categoriasFixas.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => {
-                    setCategoriaSelecionada(cat);
-                    setMostrarCategorias(false);
-                  }}
-                  className={`px-3 py-1 rounded-full border ${
-                    categoriaSelecionada === cat
-                      ? "bg-blue-600 text-white"
-                      : "bg-white text-gray-700"
-                  }`}
-                >
-                  {cat} ({contagemPorCategoria(cat)})
-                </button>
-              ))}
+            <div className="relative">
+              <button
+                onClick={() => setExpandirCategorias(!expandirCategorias)}
+                className="px-3 py-1 rounded-full border bg-white text-gray-700 flex items-center gap-1"
+              >
+                Categoria {expandirCategorias ? <FaChevronUp /> : <FaChevronDown />}
+              </button>
+              {expandirCategorias && (
+                <div className="absolute z-10 mt-2 bg-white border rounded shadow-lg p-2">
+                  {categoriasFixas.map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => {
+                        setCategoriaSelecionada(cat);
+                        setExpandirCategorias(false);
+                      }}
+                      className={`block w-full text-left px-3 py-1 rounded ${
+                        categoriaSelecionada === cat ? "bg-blue-600 text-white" : "text-gray-700"
+                      }`}
+                    >
+                      {cat} ({contagemPorCategoria(cat)})
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
+
+            <button
+              onClick={() => setCategoriaSelecionada("Favoritos")}
+              className={`px-3 py-1 rounded-full border ${
+                categoriaSelecionada === "Favoritos" ? "bg-yellow-400 text-white" : "bg-white text-gray-700"
+              }`}
+            >
+              ⭐ Favoritos ({feedbacks.filter(f => f.favorito && !f.visto).length})
+            </button>
+
+            <button
+              onClick={() => setCategoriaSelecionada("Vistos")}
+              className={`px-3 py-1 rounded-full border ${
+                categoriaSelecionada === "Vistos" ? "bg-green-500 text-white" : "bg-white text-gray-700"
+              }`}
+            >
+              👁️ Vistos ({feedbacks.filter(f => f.visto).length})
+            </button>
+          </div>
         </div>
 
         {feedbacksFiltrados.length === 0 ? (
-          <p className="text-center text-gray-500 py-8">Nenhum feedback nesta categoria.</p>
+          <p className="text-center text-gray-500 py-8">Nenhum feedback disponível.</p>
         ) : (
           Object.entries(feedbacksPorData).map(([data, items]) => (
             <div key={data} className="mb-8">
@@ -184,7 +207,7 @@ const AdminFeedbacks = () => {
                       {createdAt?.toDate().toLocaleString() || "Sem data"}
                     </p>
                     <div className="flex justify-between items-center">
-                      <p className="font-semibold text-sm md:text-base">{tipo.toUpperCase()}</p>
+                      <p className="font-semibold text-sm md:text-base">{tipo?.toUpperCase()}</p>
                       <div className="flex items-center gap-3 text-gray-500">
                         <button onClick={() => handleToggle(id, "visto")} title="Marcar como visto">
                           {visto ? <FaCheckCircle className="text-green-500" /> : <FaRegCircle />}
@@ -195,7 +218,7 @@ const AdminFeedbacks = () => {
                       </div>
                     </div>
                     <p className="mt-2 text-sm md:text-base whitespace-pre-line">{mensagem}</p>
-                    <p className="text-xs text-gray-500 mt-2 truncate">
+                    <p className="text-xs text-gray-500 mt-2 break-all">
                       Usuário: {usersMap[userId] || userId}
                     </p>
                   </li>
