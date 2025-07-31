@@ -1,5 +1,5 @@
 import React from "react";
-import BlocklyEditor from "../components/BlocklyEditor"; // importa seu editor Blockly real
+import BlocklyEditor from "../blockly/BlocklyEditor"; // importa seu editor Blockly real
 import Sidebar from "../components/Sidebar";
 import { FaLightbulb, FaRocket } from "react-icons/fa";
 
