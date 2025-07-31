@@ -4,7 +4,8 @@ import Dashboard from "./pages/Dashboard";
 import Builder from "./pages/Builder";
 import Feedback from "./pages/Feedback";
 import AdminFeedbacks from "./pages/AdminFeedbacks";
-import { UserProvider } from "./contexts/UserContext"; // garante que o contexto funcione
+import VoicePage from "./pages/VoicePage"; // 🔥 nova importação
+import { UserProvider } from "./contexts/UserContext";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/builder" element={<Builder />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/admin" element={<AdminFeedbacks />} />
+          <Route path="/voz" element={<VoicePage />} /> {/* 🔥 nova rota */}
         </Routes>
       </Router>
     </UserProvider>
