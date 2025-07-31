@@ -1,5 +1,5 @@
 import React from "react";
-import DragAndDrop from "../components/DragAndDrop";
+import BlocklyEditor from "../components/BlocklyEditor"; // importa seu editor Blockly real
 import Sidebar from "../components/Sidebar";
 import { FaLightbulb, FaRocket } from "react-icons/fa";
 
@@ -23,7 +23,7 @@ export default function Builder() {
           </p>
         </div>
         {/* Editor */}
-        <DragAndDrop />
+        <BlocklyEditor />  {/* usa seu editor Blockly aqui */}
       
         {/* Tips Card */}
         <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-2xl p-4 md:p-6 mb-6 md:mb-8 mt-6">
@@ -44,5 +44,5 @@ export default function Builder() {
         </div>
       </div>
     </div>
-);
-} 
+  );
+}
