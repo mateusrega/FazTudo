@@ -6,7 +6,7 @@ import "./index.css";
 ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 
 // Registrar service worker para PWA
-if ("serviceWorker" in navigator) {
+if ("serviceWorker" in navigator && !window.location.hostname.includes('stackblitz')) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("/service-worker.js").then(
       (registration) => {
