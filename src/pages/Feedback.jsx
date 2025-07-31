@@ -85,18 +85,28 @@ const Feedback = () => {
             <h2 className="text-xl font-bold text-gray-900 mb-4">
               Sua Mensagem
             </h2>
-            <textarea
-              className="w-full h-32 md:h-40 p-3 md:p-4 border border-gray-300 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm md:text-base"
-              value={mensagem}
-              onChange={(e) => setMensagem(e.target.value)}
-              placeholder={
-                tipo === "elogio" 
-                  ? "Conte o que você mais gostou no FazTudo..."
-                  : tipo === "sugestao"
-                  ? "Que funcionalidade você gostaria de ver no FazTudo?"
-                  : "Descreva o problema que você encontrou..."
-              }
-            />
+          <div>
+  <textarea
+    className="w-full h-32 md:h-40 p-3 md:p-4 border border-gray-300 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm md:text-base"
+    value={mensagem}
+    onChange={(e) => {
+      if (e.target.value.length <= 500) {
+        setMensagem(e.target.value);
+      }
+    }}
+    maxLength={500}
+    placeholder={
+      tipo === "elogio"
+        ? "Conte o que você mais gostou no FazTudo..."
+        : tipo === "sugestao"
+        ? "Que funcionalidade você gostaria de ver no FazTudo?"
+        : "Descreva o problema que você encontrou..."
+    }
+  />
+  <div className="text-right text-xs text-gray-500 mt-1">
+    {mensagem.length}/500 caracteres
+  </div>
+</div>
             <div className="flex justify-between items-center mt-2">
               <p className="text-sm text-gray-500">
                 {mensagem.length}/500 caracteres
