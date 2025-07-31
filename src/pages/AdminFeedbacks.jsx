@@ -13,9 +13,12 @@ import {
 import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import {
-  FaStar, FaRegStar,
-  FaCheckCircle, FaRegCircle,
-  FaChevronDown, FaChevronUp,
+  FaStar,
+  FaRegStar,
+  FaCheckCircle,
+  FaRegCircle,
+  FaChevronDown,
+  FaChevronUp,
 } from "react-icons/fa";
 
 const AdminFeedbacks = () => {
@@ -24,8 +27,8 @@ const AdminFeedbacks = () => {
   const [userCount, setUserCount] = useState(0);
   const [usersMap, setUsersMap] = useState({});
   const [categoriaSelecionada, setCategoriaSelecionada] = useState("Todos");
-  const [expandirCategorias, setExpandirCategorias] = useState(false);
-  const [mostrarListaEmails, setMostrarListaEmails] = useState(false);
+  const [categoriasAbertas, setCategoriasAbertas] = useState(false);
+  const [usuariosAbertos, setUsuariosAbertos] = useState(false);
 
   const navigate = useNavigate();
   const adminUIDs = import.meta.env.VITE_ADMIN_UIDS?.split(",") || [];
@@ -84,26 +87,26 @@ const AdminFeedbacks = () => {
   };
 
   const categoriasFixas = ["Elogio", "Sugestão", "Bug"];
-  const feedbacksVisiveis = feedbacks.filter(f => !f.visto || categoriaSelecionada === "Vistos");
-  
-  const feedbacksFiltrados = feedbacksVisiveis.filter((f) => {
-    if (categoriaSelecionada === "Todos") return true;
+  const contagemPorCategoria = (categoria) =>
+    feedbacks.filter(
+      (f) =>
+        f.tipo?.toLowerCase() === categoria.toLowerCase() &&
+        !f.visto
+    ).length;
+
+  const feedbacksVisiveis = feedbacks.filter((f) => {
+    if (categoriaSelecionada === "Todos") return !f.visto;
     if (categoriaSelecionada === "Favoritos") return f.favorito && !f.visto;
     if (categoriaSelecionada === "Vistos") return f.visto;
-    return f.tipo === categoriaSelecionada && !f.visto;
+    return f.tipo?.toLowerCase() === categoriaSelecionada.toLowerCase() && !f.visto;
   });
 
-  const contagemPorCategoria = (categoria) =>
-    feedbacks.filter(f => f.tipo === categoria && !f.visto).length;
-
-  const feedbacksPorData = feedbacksFiltrados.reduce((acc, feedback) => {
+  const feedbacksPorData = feedbacksVisiveis.reduce((acc, feedback) => {
     const data = feedback.createdAt?.toDate().toLocaleDateString() || "Sem data";
     if (!acc[data]) acc[data] = [];
     acc[data].push(feedback);
     return acc;
   }, {});
-
-  const todosEmails = Object.values(usersMap);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -111,27 +114,19 @@ const AdminFeedbacks = () => {
       <div className="lg:ml-64 p-4 md:p-6 max-w-5xl">
         <div className="pt-16 lg:pt-0">
           <h1 className="text-2xl md:text-3xl font-bold mb-2">📋 Feedbacks Recebidos</h1>
-
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-gray-600 text-sm md:text-base">
-              👥 Total de usuários registrados: <strong>{userCount}</strong>
-            </p>
-            <button
-              onClick={() => setMostrarListaEmails(!mostrarListaEmails)}
-              className="text-sm text-blue-600 underline"
-            >
-              {mostrarListaEmails ? "Ocultar e-mails" : "Mostrar e-mails"}
-            </button>
-          </div>
-
-          {mostrarListaEmails && (
-            <div className="bg-white p-3 mb-4 rounded border max-h-40 overflow-y-auto text-sm">
-              <ul className="list-disc list-inside space-y-1">
-                {todosEmails.map((email, idx) => (
-                  <li key={idx}>{email}</li>
-                ))}
-              </ul>
-            </div>
+          <p
+            onClick={() => setUsuariosAbertos((prev) => !prev)}
+            className="text-gray-600 mb-4 text-sm md:text-base cursor-pointer flex items-center gap-2"
+          >
+            👥 Total de usuários registrados: <strong>{userCount}</strong>
+            {usuariosAbertos ? <FaChevronUp /> : <FaChevronDown />}
+          </p>
+          {usuariosAbertos && (
+            <ul className="mb-4 text-sm text-gray-700 list-disc list-inside">
+              {Object.values(usersMap).map((email) => (
+                <li key={email}>{email}</li>
+              ))}
+            </ul>
           )}
 
           <div className="flex flex-wrap gap-2 mb-6">
@@ -141,35 +136,28 @@ const AdminFeedbacks = () => {
                 categoriaSelecionada === "Todos" ? "bg-blue-600 text-white" : "bg-white text-gray-700"
               }`}
             >
-              Todos ({feedbacks.filter(f => !f.visto).length})
+              Todos ({feedbacks.filter((f) => !f.visto).length})
             </button>
 
-            <div className="relative">
-              <button
-                onClick={() => setExpandirCategorias(!expandirCategorias)}
-                className="px-3 py-1 rounded-full border bg-white text-gray-700 flex items-center gap-1"
-              >
-                Categoria {expandirCategorias ? <FaChevronUp /> : <FaChevronDown />}
-              </button>
-              {expandirCategorias && (
-                <div className="absolute z-10 mt-2 bg-white border rounded shadow-lg p-2">
-                  {categoriasFixas.map((cat) => (
-                    <button
-                      key={cat}
-                      onClick={() => {
-                        setCategoriaSelecionada(cat);
-                        setExpandirCategorias(false);
-                      }}
-                      className={`block w-full text-left px-3 py-1 rounded ${
-                        categoriaSelecionada === cat ? "bg-blue-600 text-white" : "text-gray-700"
-                      }`}
-                    >
-                      {cat} ({contagemPorCategoria(cat)})
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+            <button
+              onClick={() => setCategoriasAbertas(!categoriasAbertas)}
+              className="px-3 py-1 rounded-full border bg-white text-gray-700 flex items-center gap-1"
+            >
+              Categoria {categoriasAbertas ? <FaChevronUp /> : <FaChevronDown />}
+            </button>
+
+            {categoriasAbertas &&
+              categoriasFixas.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setCategoriaSelecionada(cat)}
+                  className={`px-3 py-1 rounded-full border ${
+                    categoriaSelecionada === cat ? "bg-blue-600 text-white" : "bg-white text-gray-700"
+                  }`}
+                >
+                  {cat} ({contagemPorCategoria(cat)})
+                </button>
+              ))}
 
             <button
               onClick={() => setCategoriaSelecionada("Favoritos")}
@@ -177,7 +165,7 @@ const AdminFeedbacks = () => {
                 categoriaSelecionada === "Favoritos" ? "bg-yellow-400 text-white" : "bg-white text-gray-700"
               }`}
             >
-              ⭐ Favoritos ({feedbacks.filter(f => f.favorito && !f.visto).length})
+              ⭐ Favoritos ({feedbacks.filter((f) => f.favorito && !f.visto).length})
             </button>
 
             <button
@@ -186,13 +174,13 @@ const AdminFeedbacks = () => {
                 categoriaSelecionada === "Vistos" ? "bg-green-500 text-white" : "bg-white text-gray-700"
               }`}
             >
-              👁️ Vistos ({feedbacks.filter(f => f.visto).length})
+              👁️ Vistos ({feedbacks.filter((f) => f.visto).length})
             </button>
           </div>
         </div>
 
-        {feedbacksFiltrados.length === 0 ? (
-          <p className="text-center text-gray-500 py-8">Nenhum feedback disponível.</p>
+        {feedbacksVisiveis.length === 0 ? (
+          <p className="text-center text-gray-500 py-8">Nenhum feedback nesta categoria.</p>
         ) : (
           Object.entries(feedbacksPorData).map(([data, items]) => (
             <div key={data} className="mb-8">
@@ -207,7 +195,7 @@ const AdminFeedbacks = () => {
                       {createdAt?.toDate().toLocaleString() || "Sem data"}
                     </p>
                     <div className="flex justify-between items-center">
-                      <p className="font-semibold text-sm md:text-base">{tipo?.toUpperCase()}</p>
+                      <p className="font-semibold text-sm md:text-base">{tipo?.toUpperCase() || "SEM CATEGORIA"}</p>
                       <div className="flex items-center gap-3 text-gray-500">
                         <button onClick={() => handleToggle(id, "visto")} title="Marcar como visto">
                           {visto ? <FaCheckCircle className="text-green-500" /> : <FaRegCircle />}
@@ -217,8 +205,10 @@ const AdminFeedbacks = () => {
                         </button>
                       </div>
                     </div>
-                    <p className="mt-2 text-sm md:text-base whitespace-pre-line">{mensagem}</p>
-                    <p className="text-xs text-gray-500 mt-2 break-all">
+                    <p className="mt-2 text-sm md:text-base whitespace-pre-wrap break-words">
+                      {mensagem}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-2 truncate">
                       Usuário: {usersMap[userId] || userId}
                     </p>
                   </li>
