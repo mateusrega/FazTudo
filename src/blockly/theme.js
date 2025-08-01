@@ -5,7 +5,7 @@ export const neonTheme = Blockly.Theme.defineTheme('neon', {
   blockStyles: {
     gatilhos: {
       colourPrimary: '#FF6B6B',
-      colourSecondary: '#FF5252', 
+      colourSecondary: '#FF5252',  
       colourTertiary: '#E53E3E',
       hat: 'cap'
     },
