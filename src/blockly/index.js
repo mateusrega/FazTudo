@@ -1,53 +1,51 @@
-import Blockly from "blockly";
-import { toolbox } from "./toolbox.js";
-import "./customBlocks.js";
-import { neonTheme } from "./theme.js";
-import "blockly/generators/javascript";
-
-export function initBlockly(workspaceRef) {
-  const workspace = Blockly.inject(workspaceRef, {
-    toolbox: toolbox,
-    theme: neonTheme,
-    sounds: false,
-    trashcan: true,
-    zoom: {
-      controls: true,
-      wheel: true,
-      startScale: 1,
-      maxScale: 3,
-      minScale: 0.3,
-      scaleSpeed: 1.2
+export const toolbox = {
+  kind: "categoryToolbox",
+  contents: [
+    {
+      kind: "category",
+      name: "🔥 Gatilhos",
+      categorystyle: "gatilhos_category",
+      contents: [
+        { kind: "block", type: "webhook_trigger" }
+      ]
     },
-    grid: {
-      spacing: 20,
-      length: 3,
-      colour: '#333',
-      snap: true
+    {
+      kind: "category",
+      name: "⚡ Ações",
+      categorystyle: "acoes_category",
+      contents: [
+        { kind: "block", type: "whatsapp_message" },
+        { kind: "block", type: "save_google_sheets" },
+        { kind: "block", type: "telegram_notification" },
+        { kind: "block", type: "auto_reply" }
+      ]
     },
-    move: {
-      scrollbars: {
-        horizontal: true,
-        vertical: true
-      },
-      drag: true,
-      wheel: true
+    {
+      kind: "category",
+      name: "🧠 Lógica",
+      categorystyle: "logica_category",
+      contents: [
+        { kind: "block", type: "controls_if" },
+        { kind: "block", type: "logic_compare" },
+        { kind: "block", type: "logic_operation" },
+        { kind: "block", type: "logic_boolean" }
+      ]
+    },
+    {
+      kind: "category",
+      name: "📝 Texto",
+      categorystyle: "texto_category",
+      contents: [
+        { kind: "block", type: "text" },
+        { kind: "block", type: "text_join" },
+        { kind: "block", type: "text_print" }
+      ]
+    },
+    {
+      kind: "category",
+      name: "🔧 Variáveis",
+      categorystyle: "variaveis_category",
+      custom: "VARIABLE"
     }
-  });
-
-  // Desativar completamente todos os sons
-  workspace.getAudioManager().setVolume(0);
-  
-  // Sobrescrever métodos de áudio de forma mais segura  
-  try {
-    const audioManager = workspace.getAudioManager();
-    if (audioManager) {
-      audioManager.play = function() { return null; };
-      audioManager.load = function() { return null; };
-      audioManager.preload = function() { return null; };
-    }
-  } catch (error) {
-    console.warn("Não foi possível desabilitar áudio:", error);
-  }
-
-  return workspace;
-}
+  ]
+};
