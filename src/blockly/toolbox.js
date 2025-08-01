@@ -1,3 +1,5 @@
+// src/blockly/toolbox.js
+
 export const toolbox = {
   "kind": "categoryToolbox",
   "contents": [
@@ -10,7 +12,7 @@ export const toolbox = {
       ]
     },
     {
-      "kind": "category", 
+      "kind": "category",
       "name": "⚡ Ações",
       "categorystyle": "acoes_category",
       "contents": [
@@ -22,7 +24,7 @@ export const toolbox = {
     },
     {
       "kind": "category",
-      "name": "🧠 Lógica", 
+      "name": "🧠 Lógica",
       "categorystyle": "logica_category",
       "contents": [
         { "kind": "block", "type": "controls_if" },
@@ -34,7 +36,7 @@ export const toolbox = {
     {
       "kind": "category",
       "name": "📝 Texto",
-      "categorystyle": "texto_category", 
+      "categorystyle": "texto_category",
       "contents": [
         { "kind": "block", "type": "text" },
         { "kind": "block", "type": "text_join" },
