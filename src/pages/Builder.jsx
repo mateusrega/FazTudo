@@ -51,6 +51,7 @@ export default function Builder() {
                 <li>• <strong>Lógica:</strong> Adicione condições e decisões</li>
                 <li>• <strong>Conecte os blocos:</strong> Arraste e solte para criar o fluxo</li>
               </ul>
+              <a href: "src/components/animation.jsx">animação</a>
             </div>
           </div>
         </div>
