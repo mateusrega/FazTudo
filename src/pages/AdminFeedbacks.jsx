@@ -370,72 +370,79 @@ const AdminFeedbacks = () => {
                   </div>
                   
                   <div className="divide-y divide-gray-200">
-                    {lista.map(({ id, userId, userEmail, mensagem, tipo, createdAt, visto, favorito }) => (
-                      <div
-                        key={id}
-                        className={`p-4 md:p-6 transition-all duration-200 ${
-                          !visto ? 'bg-blue-50/50' : 'bg-white'
-                        } hover:bg-gray-50`}
-                      >
-                        <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-3">
-                              <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border ${getTipoColor(tipo)}`}>
-                                {getTipoIcon(tipo)}
-                                {tipo?.toUpperCase() || "TIPO?"}
-                              </span>
-                              
-                              <span className="text-xs text-gray-500">
-                                {createdAt?.toDate().toLocaleString('pt-BR') || "Sem data"}
-                              </span>
-                              
-                              {!visto && (
-                                <span className="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs font-medium">
-                                  Novo
+                    {lista.map(({ id, userId, mensagem, tipo, createdAt, visto, favorito }) => {
+                      const criadoEm = createdAt?.toDate();
+                      const agora = new Date();
+                      const diffHoras = criadoEm ? (agora - criadoEm) / (1000 * 60 * 60) : 0;
+                      const isNovo = diffHoras <= 24;
+
+                      return (
+                        <div
+                          key={id}
+                          className={`p-4 md:p-6 transition-all duration-200 ${
+                            !visto ? 'bg-blue-50/50' : 'bg-white'
+                          } hover:bg-gray-50`}
+                        >
+                          <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-3 mb-3">
+                                <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border ${getTipoColor(tipo)}`}>
+                                  {getTipoIcon(tipo)}
+                                  {tipo?.toUpperCase() || "TIPO?"}
                                 </span>
-                              )}
-                            </div>
+                                
+                                <span className="text-xs text-gray-500">
+                                  {criadoEm?.toLocaleString('pt-BR') || "Sem data"}
+                                </span>
+                                
+                                {isNovo && !visto && (
+                                  <span className="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs font-medium">
+                                    Novo
+                                  </span>
+                                )}
+                              </div>
 
-                            <p className="text-gray-900 mb-3 whitespace-pre-line break-words leading-relaxed w-full">
-                              {mensagem}
-                            </p>
+                              <p className="text-gray-900 mb-3 whitespace-pre-line break-words leading-relaxed w-full">
+                                {mensagem}
+                              </p>
 
-                            <div className="flex items-center gap-2 text-xs text-gray-500">
-                              <FaUsers className="text-gray-400" />
-                              <span className="truncate">
-                                {userMap[userId] || userEmail || userId}
-                              </span>
+                              <div className="flex items-center gap-2 text-xs text-gray-500">
+                                <FaUsers className="text-gray-400" />
+                                <span className="truncate">
+                                  {userMap[userId] || userId}
+                                </span>
+                              </div>
                             </div>
-                          </div>
-                          
-                          <div className="flex items-center gap-2 flex-shrink-0">
-                            <button
-                              onClick={() => handleMarcarVisto(id, !visto)}
-                              className={`p-2 rounded-lg transition-all duration-200 ${
-                                visto 
-                                  ? 'bg-green-100 text-green-600 hover:bg-green-200' 
-                                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                              }`}
-                              title={visto ? "Marcar como não lido" : "Marcar como lido"}
-                            >
-                              {visto ? <FaEye /> : <FaEyeSlash />}
-                            </button>
                             
-                            <button
-                              onClick={() => handleFavoritar(id, !favorito)}
-                              className={`p-2 rounded-lg transition-all duration-200 ${
-                                favorito 
-                                  ? 'bg-yellow-100 text-yellow-600 hover:bg-yellow-200' 
-                                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                              }`}
-                              title={favorito ? "Remover dos favoritos" : "Adicionar aos favoritos"}
-                            >
-                              {favorito ? <FaStar /> : <FaRegStar />}
-                            </button>
+                            <div className="flex items-center gap-2 flex-shrink-0">
+                              <button
+                                onClick={() => handleMarcarVisto(id, !visto)}
+                                className={`p-2 rounded-lg transition-all duration-200 ${
+                                  visto 
+                                    ? 'bg-green-100 text-green-600 hover:bg-green-200' 
+                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                }`}
+                                title={visto ? "Marcar como não lido" : "Marcar como lido"}
+                              >
+                                {visto ? <FaEye /> : <FaEyeSlash />}
+                              </button>
+                              
+                              <button
+                                onClick={() => handleFavoritar(id, !favorito)}
+                                className={`p-2 rounded-lg transition-all duration-200 ${
+                                  favorito 
+                                    ? 'bg-yellow-100 text-yellow-600 hover:bg-yellow-200' 
+                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                }`}
+                                title={favorito ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+                              >
+                                {favorito ? <FaStar /> : <FaRegStar />}
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               ))}
