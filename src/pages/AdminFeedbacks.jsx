@@ -61,8 +61,7 @@ const AdminFeedbacks = () => {
         const map = {};
         userSnapshot.forEach((doc) => {
           const data = doc.data();
-          map[doc.id] = data.nome || data.email || "Usuário";
-        });
+          map[doc.id] = data.nome || data.email });
         setUserMap(map);
         setUserCount(userSnapshot.size);
       } catch (error) {
