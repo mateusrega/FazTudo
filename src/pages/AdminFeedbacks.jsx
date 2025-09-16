@@ -7,7 +7,6 @@ import {
   query,
   updateDoc,
   doc,
-  getCountFromServer,
 } from "firebase/firestore";
 import { db } from "../services/firebase";
 import { UserContext } from "../contexts/UserContext";
@@ -371,7 +370,7 @@ const AdminFeedbacks = () => {
                   </div>
                   
                   <div className="divide-y divide-gray-200">
-                    {lista.map(({ id, userId, mensagem, tipo, createdAt, visto, favorito }) => (
+                    {lista.map(({ id, userId, userEmail, mensagem, tipo, createdAt, visto, favorito }) => (
                       <div
                         key={id}
                         className={`p-4 md:p-6 transition-all duration-200 ${
@@ -396,13 +395,15 @@ const AdminFeedbacks = () => {
                                 </span>
                               )}
                             </div>
-                              <p className="text-gray-900 mb-3 whitespace-pre-line break-words leading-relaxed w-full">
-                               {mensagem}
-                               </p>
-                              <div className="flex items-center gap-2 text-xs text-gray-500">
+
+                            <p className="text-gray-900 mb-3 whitespace-pre-line break-words leading-relaxed w-full">
+                              {mensagem}
+                            </p>
+
+                            <div className="flex items-center gap-2 text-xs text-gray-500">
                               <FaUsers className="text-gray-400" />
                               <span className="truncate">
-                                {userMap[userId] || userId}
+                                {userMap[userId] || userEmail || userId}
                               </span>
                             </div>
                           </div>
