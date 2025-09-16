@@ -30,7 +30,7 @@ const AdminFeedbacks = () => {
   const { user } = useContext(UserContext);
   const [feedbacks, setFeedbacks] = useState([]);
   const [userMap, setUserMap] = useState({});
-  const [userCount, setUserCount] = useState({});
+  const [userCount, setUserCount] = useState(0);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState("Todos");
   const [mostrarCategorias, setMostrarCategorias] = useState(false);
   const [mostrarEmails, setMostrarEmails] = useState(false);
