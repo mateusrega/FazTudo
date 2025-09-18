@@ -1,25 +1,32 @@
 // src/pages/Builder.jsx
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import VoiceRecorder from "../components/VoiceRecorder"; // 🎙️ continua
-import { FaLightbulb, FaRocket } from "react-icons/fa";
+import { FaLightbulb, FaRocket, FaExpand, FaCompress } from "react-icons/fa";
 import * as Blockly from "blockly/core";
-import "blockly/blocks"; // blocos padrão
-import "blockly/javascript"; // gerador de código (não vamos usar agora)
+import "blockly/blocks";
+import "blockly/javascript";
 
 export default function Builder() {
   const blocklyDiv = useRef(null);
   const toolbox = useRef(null);
   const workspaceRef = useRef(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     if (!blocklyDiv.current || !toolbox.current) return;
 
-    // Inicializa o Blockly
     workspaceRef.current = Blockly.inject(blocklyDiv.current, {
       toolbox: toolbox.current,
       trashcan: true,
       scrollbars: true,
+      zoom: {
+        controls: true,
+        wheel: true,
+        startScale: 1.0,
+        maxScale: 2,
+        minScale: 0.3,
+      },
     });
 
     return () => {
@@ -37,27 +44,52 @@ export default function Builder() {
       {/* Conteúdo principal */}
       <div className="flex-1 lg:ml-64 p-4 md:p-8">
         {/* Header */}
-        <div className="mb-6 md:mb-8 pt-16 lg:pt-0">
-          <div className="flex items-center gap-3 mb-4 flex-wrap">
-            <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-xl flex-shrink-0">
-              <FaRocket className="text-white text-xl" />
+        <div className="mb-6 md:mb-8 pt-16 lg:pt-0 flex justify-between items-start flex-wrap gap-4">
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-xl">
+                <FaRocket className="text-white text-xl" />
+              </div>
+              <h1 className="text-2xl md:text-4xl font-bold text-gray-900">
+                Criador de Automações
+              </h1>
             </div>
-            <h1 className="text-2xl md:text-4xl font-bold text-gray-900">
-              Criador de Automações
-            </h1>
+            <p className="text-gray-600 text-sm md:text-lg">
+              Monte fluxos de automação arrastando blocos. 🚀
+            </p>
           </div>
-          <p className="text-gray-600 text-sm md:text-lg">
-            Monte fluxos de automação arrastando blocos. 🚀
-          </p>
+
+          {/* Botão de tela cheia */}
+          <button
+            onClick={() => setIsFullscreen(!isFullscreen)}
+            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-xl shadow hover:opacity-90 transition"
+          >
+            {isFullscreen ? (
+              <>
+                <FaCompress /> Sair da Tela Cheia
+              </>
+            ) : (
+              <>
+                <FaExpand /> Tela Cheia
+              </>
+            )}
+          </button>
         </div>
 
         {/* Editor de blocos */}
-        <div className="border rounded-xl bg-white shadow p-2 md:p-4">
+        <div
+          className={`relative border rounded-2xl bg-white shadow-lg overflow-hidden transition-all ${
+            isFullscreen
+              ? "fixed inset-0 z-50 m-0 rounded-none"
+              : "p-2 md:p-4"
+          }`}
+        >
           <div
             ref={blocklyDiv}
-            style={{ height: "500px", width: "100%" }}
+            style={{ height: isFullscreen ? "100%" : "500px", width: "100%" }}
           ></div>
-          {/* Definição da toolbox */}
+
+          {/* Toolbox */}
           <xml
             xmlns="https://developers.google.com/blockly/xml"
             style={{ display: "none" }}
@@ -82,6 +114,16 @@ export default function Builder() {
               <block type="math_arithmetic"></block>
             </category>
           </xml>
+
+          {/* Botão flutuante para sair da tela cheia */}
+          {isFullscreen && (
+            <button
+              onClick={() => setIsFullscreen(false)}
+              className="absolute top-4 right-4 bg-red-500 text-white px-3 py-2 rounded-xl shadow-lg flex items-center gap-2 hover:bg-red-600 transition"
+            >
+              <FaCompress /> Fechar
+            </button>
+          )}
         </div>
 
         {/* Gravador de voz */}
@@ -89,7 +131,6 @@ export default function Builder() {
           <VoiceRecorder
             onResult={(texto) => {
               console.log("Comando de voz:", texto);
-              // 👉 no futuro: transformar texto em blocos
             }}
           />
         </div>
@@ -107,6 +148,7 @@ export default function Builder() {
               <ul className="text-gray-700 space-y-1 text-xs md:text-sm">
                 <li>• Arraste blocos da caixa lateral para a área branca</li>
                 <li>• Encaixe blocos de lógica, loops, matemática e texto</li>
+                <li>• Clique em "Tela Cheia" para expandir o editor</li>
                 <li>• Use a lixeira para remover blocos</li>
                 <li>• Em breve: integração com comandos de voz 🎙️</li>
               </ul>
@@ -116,4 +158,4 @@ export default function Builder() {
       </div>
     </div>
   );
-}
+            }
