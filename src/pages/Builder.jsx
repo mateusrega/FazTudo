@@ -27,11 +27,17 @@ export default function Builder() {
         drag: true,
         wheel: false,
         dragOptions: {
-          snap: true,               // encaixe instantâneo
-          dragStartHysteresis: 0,   // arraste instantâneo no touch
+          snap: true,
+          dragStartHysteresis: 0, // arraste instantâneo
         },
       },
     });
+
+    // Ajusta a lixeira: menor e mais para cima
+    const trash = workspaceRef.current.trashcan_;
+    if (trash && trash.svgGroup_) {
+      trash.svgGroup_.setAttribute("transform", "translate(0,-50) scale(0.33)");
+    }
 
     // Redimensionamento automático
     const resizeObserver = new ResizeObserver(() => {
@@ -204,4 +210,4 @@ export default function Builder() {
       </div>
     </div>
   );
-          }
+}
