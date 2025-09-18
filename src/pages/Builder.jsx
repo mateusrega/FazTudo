@@ -1,10 +1,34 @@
 // src/pages/Builder.jsx
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Sidebar from "../components/Sidebar";
 import VoiceRecorder from "../components/VoiceRecorder"; // 🎙️ continua
 import { FaLightbulb, FaRocket } from "react-icons/fa";
+import * as Blockly from "blockly/core";
+import "blockly/blocks"; // blocos padrão
+import "blockly/javascript"; // gerador de código (não vamos usar agora)
 
 export default function Builder() {
+  const blocklyDiv = useRef(null);
+  const toolbox = useRef(null);
+  const workspaceRef = useRef(null);
+
+  useEffect(() => {
+    if (!blocklyDiv.current || !toolbox.current) return;
+
+    // Inicializa o Blockly
+    workspaceRef.current = Blockly.inject(blocklyDiv.current, {
+      toolbox: toolbox.current,
+      trashcan: true,
+      scrollbars: true,
+    });
+
+    return () => {
+      if (workspaceRef.current) {
+        workspaceRef.current.dispose();
+      }
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
@@ -23,8 +47,41 @@ export default function Builder() {
             </h1>
           </div>
           <p className="text-gray-600 text-sm md:text-lg">
-            Aqui você poderá criar automações. 🚀
+            Monte fluxos de automação arrastando blocos. 🚀
           </p>
+        </div>
+
+        {/* Editor de blocos */}
+        <div className="border rounded-xl bg-white shadow p-2 md:p-4">
+          <div
+            ref={blocklyDiv}
+            style={{ height: "500px", width: "100%" }}
+          ></div>
+          {/* Definição da toolbox */}
+          <xml
+            xmlns="https://developers.google.com/blockly/xml"
+            style={{ display: "none" }}
+            ref={toolbox}
+          >
+            <category name="Lógica" colour="210">
+              <block type="controls_if"></block>
+              <block type="logic_compare"></block>
+              <block type="logic_operation"></block>
+              <block type="logic_boolean"></block>
+            </category>
+            <category name="Loops" colour="120">
+              <block type="controls_repeat_ext"></block>
+              <block type="controls_whileUntil"></block>
+            </category>
+            <category name="Texto" colour="160">
+              <block type="text"></block>
+              <block type="text_print"></block>
+            </category>
+            <category name="Matemática" colour="230">
+              <block type="math_number"></block>
+              <block type="math_arithmetic"></block>
+            </category>
+          </xml>
         </div>
 
         {/* Gravador de voz */}
@@ -32,7 +89,7 @@ export default function Builder() {
           <VoiceRecorder
             onResult={(texto) => {
               console.log("Comando de voz:", texto);
-              // 👉 aqui no futuro você interpreta e transforma em blocos ou fluxos
+              // 👉 no futuro: transformar texto em blocos
             }}
           />
         </div>
@@ -48,9 +105,10 @@ export default function Builder() {
                 Como usar o Builder:
               </h3>
               <ul className="text-gray-700 space-y-1 text-xs md:text-sm">
-                <li>• <strong>Voz:</strong> Grave comandos para configurar automações</li>
-                <li>• <strong>Fluxos:</strong> Em breve será possível montar fluxos visuais</li>
-                <li>• <strong>Dicas:</strong> Experimente gravar frases como <em>"quando receber mensagem, salvar no banco"</em></li>
+                <li>• Arraste blocos da caixa lateral para a área branca</li>
+                <li>• Encaixe blocos de lógica, loops, matemática e texto</li>
+                <li>• Use a lixeira para remover blocos</li>
+                <li>• Em breve: integração com comandos de voz 🎙️</li>
               </ul>
             </div>
           </div>
