@@ -1,7 +1,6 @@
 import React from "react";
-import BlocklyEditor from "../blockly/BlocklyEditor"; // importa seu editor Blockly real
 import Sidebar from "../components/Sidebar";
-import VoiceRecorder from "../components/VoiceRecorder"; // 🎙️ novo componente
+import VoiceRecorder from "../components/VoiceRecorder"; // 🎙️ continua
 import { FaLightbulb, FaRocket } from "react-icons/fa";
 
 export default function Builder() {
@@ -20,19 +19,16 @@ export default function Builder() {
             </h1>
           </div>
           <p className="text-gray-600 text-sm md:text-lg">
-            Use o editor visual para criar automações poderosas sem programar
+            Aqui você poderá criar automações. 🚀
           </p>
         </div>
-
-        {/* Editor */}
-        <BlocklyEditor />
 
         {/* Voice Recorder */}
         <div className="mt-6">
           <VoiceRecorder
             onResult={(texto) => {
               console.log("Comando de voz:", texto);
-              // Aqui você pode interpretar comandos de voz no futuro
+              // Aqui no futuro você pode interpretar comandos de voz
             }}
           />
         </div>
@@ -44,17 +40,17 @@ export default function Builder() {
               <FaLightbulb className="text-yellow-600 text-lg md:text-xl" />
             </div>
             <div>
-              <h3 className="font-bold text-gray-900 mb-2 text-sm md:text-base">Como usar o Builder:</h3>
+              <h3 className="font-bold text-gray-900 mb-2 text-sm md:text-base">
+                Como usar o Builder:
+              </h3>
               <ul className="text-gray-700 space-y-1 text-xs md:text-sm">
-                <li>• <strong>Gatilhos:</strong> Escolha o que inicia sua automação (webhook, botão, etc.)</li>
-                <li>• <strong>Ações:</strong> Defina o que acontece (enviar mensagem, salvar dados, etc.)</li>
-                <li>• <strong>Lógica:</strong> Adicione condições e decisões</li>
-                <li>• <strong>Conecte os blocos:</strong> Arraste e solte para criar o fluxo</li>
+                <li>• <strong>Voz:</strong> Grave comandos para configurar automações</li>
+                <li>• <strong>Fluxos:</strong> Em breve será possível montar fluxos visuais</li>
+                <li>• <strong>Dicas:</strong> Experimente gravar frases como "quando receber mensagem, salvar no banco"</li>
               </ul>
-                </div>
+            </div>
           </div>
         </div>
-
       </div>
     </div>
   );
