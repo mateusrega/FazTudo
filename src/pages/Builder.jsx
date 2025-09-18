@@ -1,7 +1,7 @@
 // src/pages/Builder.jsx
 import React, { useEffect, useRef, useState } from "react";
 import Sidebar from "../components/Sidebar";
-import VoiceRecorder from "../components/VoiceRecorder"; // 🎙️ continua
+import VoiceRecorder from "../components/VoiceRecorder";
 import { FaLightbulb, FaRocket, FaExpand, FaCompress } from "react-icons/fa";
 import * as Blockly from "blockly/core";
 import "blockly/blocks";
@@ -13,35 +13,52 @@ export default function Builder() {
   const workspaceRef = useRef(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
+  // Inicializa o Blockly
   useEffect(() => {
     if (!blocklyDiv.current || !toolbox.current) return;
 
     workspaceRef.current = Blockly.inject(blocklyDiv.current, {
       toolbox: toolbox.current,
       trashcan: true,
-      scrollbars: true,
+      horizontalLayout: false, // 🔥 mantém as categorias estáveis
       zoom: {
         controls: true,
         wheel: true,
-        startScale: 1.0,
+        startScale: 1,
         maxScale: 2,
         minScale: 0.3,
       },
     });
 
+    // Ajusta ao redimensionar a janela
+    const handleResize = () => {
+      if (workspaceRef.current) {
+        Blockly.svgResize(workspaceRef.current);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
     return () => {
+      window.removeEventListener("resize", handleResize);
       if (workspaceRef.current) {
         workspaceRef.current.dispose();
       }
     };
   }, []);
 
+  // Sempre que ativar/desativar fullscreen → forçar resize
+  useEffect(() => {
+    if (workspaceRef.current) {
+      setTimeout(() => {
+        Blockly.svgResize(workspaceRef.current);
+      }, 100); // pequeno delay pra garantir que o layout aplicou
+    }
+  }, [isFullscreen]);
+
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      {/* Sidebar */}
       <Sidebar />
 
-      {/* Conteúdo principal */}
       <div className="flex-1 lg:ml-64 p-4 md:p-8">
         {/* Header */}
         <div className="mb-6 md:mb-8 pt-16 lg:pt-0 flex justify-between items-start flex-wrap gap-4">
@@ -76,7 +93,7 @@ export default function Builder() {
           </button>
         </div>
 
-        {/* Editor de blocos */}
+        {/* Editor */}
         <div
           className={`relative border rounded-2xl bg-white shadow-lg overflow-hidden transition-all ${
             isFullscreen
@@ -87,7 +104,7 @@ export default function Builder() {
           <div
             ref={blocklyDiv}
             style={{ height: isFullscreen ? "100%" : "500px", width: "100%" }}
-          ></div>
+          />
 
           {/* Toolbox */}
           <xml
@@ -115,7 +132,7 @@ export default function Builder() {
             </category>
           </xml>
 
-          {/* Botão flutuante para sair da tela cheia */}
+          {/* Botão dentro do fullscreen */}
           {isFullscreen && (
             <button
               onClick={() => setIsFullscreen(false)}
@@ -158,4 +175,4 @@ export default function Builder() {
       </div>
     </div>
   );
-            }
+        }
