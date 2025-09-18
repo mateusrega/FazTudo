@@ -22,6 +22,15 @@ export default function Builder() {
       trashcan: true,
       horizontalLayout: false,
       zoom: { controls: true, wheel: true, startScale: 1, maxScale: 2, minScale: 0.3 },
+      move: {
+        scrollbars: true,
+        drag: true,
+        wheel: false,
+        dragOptions: {
+          snap: true,               // encaixe instantâneo
+          dragStartHysteresis: 0,   // arraste instantâneo no touch
+        },
+      },
     });
 
     // Redimensionamento automático
@@ -39,9 +48,7 @@ export default function Builder() {
   // Ajusta Blockly ao alternar fullscreen
   useEffect(() => {
     if (workspaceRef.current) {
-      setTimeout(() => {
-        Blockly.svgResize(workspaceRef.current);
-      }, 100);
+      setTimeout(() => Blockly.svgResize(workspaceRef.current), 100);
     }
   }, [isFullscreen]);
 
@@ -103,9 +110,7 @@ export default function Builder() {
         {/* Editor */}
         <div
           className={`relative bg-white shadow-lg transition-all ${
-            isFullscreen
-              ? "fixed inset-0 z-50"
-              : "border rounded-2xl p-2 md:p-4"
+            isFullscreen ? "fixed inset-0 z-50" : "border rounded-2xl p-2 md:p-4"
           }`}
         >
           <div
@@ -199,4 +204,4 @@ export default function Builder() {
       </div>
     </div>
   );
-            }
+          }
