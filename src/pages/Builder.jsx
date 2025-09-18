@@ -1,3 +1,4 @@
+// src/pages/Builder.jsx
 import React from "react";
 import Sidebar from "../components/Sidebar";
 import VoiceRecorder from "../components/VoiceRecorder"; // 🎙️ continua
@@ -5,8 +6,11 @@ import { FaLightbulb, FaRocket } from "react-icons/fa";
 
 export default function Builder() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex">
+      {/* Sidebar */}
       <Sidebar />
+
+      {/* Conteúdo principal */}
       <div className="flex-1 lg:ml-64 p-4 md:p-8">
         {/* Header */}
         <div className="mb-6 md:mb-8 pt-16 lg:pt-0">
@@ -23,17 +27,17 @@ export default function Builder() {
           </p>
         </div>
 
-        {/* Voice Recorder */}
+        {/* Gravador de voz */}
         <div className="mt-6">
           <VoiceRecorder
             onResult={(texto) => {
               console.log("Comando de voz:", texto);
-              // Aqui no futuro você pode interpretar comandos de voz
+              // 👉 aqui no futuro você interpreta e transforma em blocos ou fluxos
             }}
           />
         </div>
 
-        {/* Tips Card */}
+        {/* Dicas */}
         <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-2xl p-4 md:p-6 mb-6 md:mb-8 mt-6">
           <div className="flex items-start gap-4">
             <div className="bg-yellow-100 p-2 rounded-xl flex-shrink-0">
@@ -46,7 +50,7 @@ export default function Builder() {
               <ul className="text-gray-700 space-y-1 text-xs md:text-sm">
                 <li>• <strong>Voz:</strong> Grave comandos para configurar automações</li>
                 <li>• <strong>Fluxos:</strong> Em breve será possível montar fluxos visuais</li>
-                <li>• <strong>Dicas:</strong> Experimente gravar frases como "quando receber mensagem, salvar no banco"</li>
+                <li>• <strong>Dicas:</strong> Experimente gravar frases como <em>"quando receber mensagem, salvar no banco"</em></li>
               </ul>
             </div>
           </div>
