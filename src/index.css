@@ -127,32 +127,108 @@ button:focus {
 
 /* Blockly custom styles */
 .blocklyToolboxDiv {
-  background: linear-gradient(135deg, #2D3748, #4A5568) !important;
-  border-right: 1px solid #475569 !important;
+  background: linear-gradient(135deg, #1f2937, #374151) !important;
+  border-right: 2px solid #4f46e5 !important;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1) !important;
 }
 
 .blocklyFlyout {
-  background: rgba(45, 55, 72, 0.95) !important;
+  background: rgba(31, 41, 55, 0.98) !important;
   backdrop-filter: blur(10px) !important;
+  border-radius: 0 12px 12px 0 !important;
 }
 
 .blocklyTreeLabel {
-  color: #E2E8F0 !important;
+  color: #f9fafb !important;
   font-family: 'Inter', sans-serif !important;
-  font-weight: 500 !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
 }
 
 .blocklyTreeRow {
   background: transparent !important;
+  border-radius: 8px !important;
+  margin: 2px 4px !important;
+  transition: all 0.2s ease !important;
 }
 
 .blocklyTreeRow:hover {
-  background: rgba(255, 255, 255, 0.1) !important;
+  background: rgba(79, 70, 229, 0.2) !important;
+  transform: translateX(4px) !important;
+}
+
+.blocklyTreeRowSelected {
+  background: rgba(79, 70, 229, 0.3) !important;
+  border-left: 3px solid #4f46e5 !important;
 }
 
 .blocklyScrollbarHandle {
   background: linear-gradient(135deg, #3b82f6, #8b5cf6) !important;
   border-radius: 4px !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+.blocklyScrollbarBackground {
+  fill: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Workspace styling */
+.blockly-workspace {
+  background: linear-gradient(45deg, #f8fafc 25%, transparent 25%), 
+              linear-gradient(-45deg, #f8fafc 25%, transparent 25%), 
+              linear-gradient(45deg, transparent 75%, #f8fafc 75%), 
+              linear-gradient(-45deg, transparent 75%, #f8fafc 75%) !important;
+  background-size: 20px 20px !important;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px !important;
+}
+
+/* Block shadows and styling */
+.blocklyBlockCanvas .blocklyDraggable {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1)) !important;
+  transition: all 0.2s ease !important;
+}
+
+.blocklyBlockCanvas .blocklyDraggable:hover {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15)) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Toolbox categories styling */
+.blocklyTreeIcon {
+  margin-right: 8px !important;
+}
+
+/* Connection highlights */
+.blocklyHighlightedConnectionPath {
+  stroke: #4f46e5 !important;
+  stroke-width: 4px !important;
+  filter: drop-shadow(0 0 6px rgba(79, 70, 229, 0.6)) !important;
+}
+
+/* Trash can styling */
+.blocklyTrash {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2)) !important;
+}
+
+/* Zoom controls */
+.blocklyZoom {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.blocklyZoom .blocklyZoomButton {
+  background: transparent !important;
+  border: none !important;
+  color: #374151 !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+.blocklyZoom .blocklyZoomButton:hover {
+  background: rgba(79, 70, 229, 0.1) !important;
+  color: #4f46e5 !important;
 }
 
 /* Custom utility classes */
@@ -199,4 +275,4 @@ button:focus {
   .no-print {
     display: none !important;
   }
-}
+  }
